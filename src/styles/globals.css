@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Typography upgrade */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Better shadows */
+.shadow-soft {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+/* Smooth UI feel */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Buttons polish */
+button {
+  cursor: pointer;
+}
