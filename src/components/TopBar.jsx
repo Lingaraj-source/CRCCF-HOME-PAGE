@@ -15,17 +15,15 @@ export default function TopBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [time, setTime] = useState(new Date());
 
-  // ⏱️ Real-time clock
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
   const formattedDate = time.toLocaleDateString("en-IN", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
+    weekday: "short",
     day: "numeric",
+    month: "short",
   });
 
   const formattedTime = time.toLocaleTimeString("en-IN");
@@ -34,41 +32,37 @@ export default function TopBar() {
     <div className="bg-[#0f172a] text-white text-sm relative z-[999]">
 
       {/* ================= CONTAINER ================= */}
-      <div className="flex items-center justify-between px-4 md:px-10 lg:px-20 h-10">
+      <div className="flex items-center justify-between px-3 md:px-10 lg:px-20 h-10 gap-2">
 
-        {/* ================= LEFT (MARQUEE ~80%) ================= */}
-        <div className="flex-1 overflow-hidden mr-4 hidden md:block">
+        {/* ================= MARQUEE (VISIBLE ON ALL DEVICES) ================= */}
+        <div className="flex-1 overflow-hidden">
 
           <div className="marquee-wrapper">
             <div className="marquee-track">
 
               {/* BLOCK 1 */}
-              <div className="flex items-center gap-1 mr-10">
+              <div className="flex items-center gap-1 mr-8">
                 <img
                   src={logo}
                   alt="logo"
-                  className="h-6 w-auto flex-shrink-0 object-contain"
+                  className="h-5 md:h-6 object-contain flex-shrink-0"
                 />
-                <p className="whitespace-nowrap text-white/80">
+                <p className="whitespace-nowrap text-[11px] md:text-sm text-white/80">
                   Welcome to CR Cyber Crime Foundation — a leading IT, software, and cybersecurity organization in India.
                   With 24/7 dedication, CRCCF delivers innovative software products, scalable applications, and end-to-end IT services,
-                  along with advanced cyber security, intelligence, and awareness solutions. We empower businesses and individuals
-                  with secure, reliable, and future-ready digital technologies.
+                  along with advanced cyber security, intelligence, and awareness solutions.
                 </p>
               </div>
 
-              {/* BLOCK 2 (duplicate for seamless loop) */}
+              {/* BLOCK 2 */}
               <div className="flex items-center gap-1">
                 <img
                   src={logo}
                   alt="logo"
-                  className="h-6 w-auto flex-shrink-0 object-contain"
+                  className="h-5 md:h-6 object-contain flex-shrink-0"
                 />
-                <p className="whitespace-nowrap text-white/80">
-                  Welcome to CR Cyber Crime Foundation — a leading IT, software, and cybersecurity organization in India.
-                  With 24/7 dedication, CRCCF delivers innovative software products, scalable applications, and end-to-end IT services,
-                  along with advanced cyber security, intelligence, and awareness solutions. We empower businesses and individuals
-                  with secure, reliable, and future-ready digital technologies.
+                <p className="whitespace-nowrap text-[11px] md:text-sm text-white/80">
+                  We empower businesses and individuals with secure, reliable, and future-ready digital technologies.
                 </p>
               </div>
 
@@ -77,14 +71,14 @@ export default function TopBar() {
 
         </div>
 
-        {/* ================= RIGHT (ICONS) ================= */}
-        <div className="flex items-center gap-4 flex-shrink-0">
+        {/* ================= RIGHT SIDE ================= */}
+        <div className="flex items-center gap-3 flex-shrink-0">
 
-          {/* 🔍 Search */}
-          <div className="relative">
+          {/* SEARCH */}
+          <div className="relative hidden sm:block">
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="hover:text-blue-400 transition"
+              className="hover:text-blue-400 transition text-sm"
             >
               <FaSearch />
             </button>
@@ -93,53 +87,49 @@ export default function TopBar() {
               <input
                 type="text"
                 placeholder="Search..."
-                className="absolute right-0 top-8 px-3 py-1 rounded bg-white text-black text-sm shadow-md outline-none w-40"
+                className="absolute right-0 top-8 px-3 py-1 rounded bg-white text-black text-xs shadow-md outline-none w-36"
               />
             )}
           </div>
 
-          {/* 📅 Calendar */}
+          {/* CALENDAR */}
           <div
             onMouseEnter={() => setShowCalendar(true)}
             onMouseLeave={() => setShowCalendar(false)}
-            className="relative"
+            className="relative hidden sm:block"
           >
-            <button className="hover:text-blue-400 transition">
+            <button className="hover:text-blue-400 transition text-sm">
               <FaCalendarAlt />
             </button>
 
             {showCalendar && (
-              <div className="fixed top-12 right-6 bg-white text-black p-4 rounded-lg shadow-xl w-56 z-[9999] border border-gray-200">
+              <div className="fixed top-12 right-4 bg-white text-black p-3 rounded-lg shadow-xl w-48 z-[9999]">
 
-                <p className="text-sm text-blue-600 font-semibold text-center">
+                <p className="text-xs text-blue-600 font-semibold text-center">
                   {formattedDate}
                 </p>
 
-                <p className="text-lg font-bold text-center mt-1">
+                <p className="text-base font-bold text-center mt-1">
                   {formattedTime}
-                </p>
-
-                <p className="text-xs text-center mt-2 text-gray-500">
-                  IST (Indian Standard Time)
                 </p>
               </div>
             )}
           </div>
 
-          {/* ❓ Help */}
-          <button className="hover:text-yellow-400 transition">
+          {/* HELP */}
+          <button className="hidden sm:block hover:text-yellow-400 transition text-sm">
             <FaQuestionCircle />
           </button>
 
-          {/* 🌐 Reach Us */}
-          <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md text-xs font-medium transition">
+          {/* REACH US */}
+          <button className="hidden sm:flex items-center gap-1 bg-blue-600 px-2 py-1 rounded text-[10px]">
             <FaGlobe />
             Reach Us
           </button>
 
-          {/* 📱 Mobile menu */}
+          {/* MOBILE MENU */}
           <button
-            className="md:hidden"
+            className="sm:hidden text-sm"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <FaEllipsisV />
@@ -149,7 +139,7 @@ export default function TopBar() {
 
       {/* ================= MOBILE DROPDOWN ================= */}
       {menuOpen && (
-        <div className="md:hidden absolute right-2 top-10 bg-white text-black rounded shadow-md p-3 w-44 z-[9999]">
+        <div className="sm:hidden absolute right-2 top-10 bg-white text-black rounded shadow-md p-3 w-40 z-[9999] text-xs">
           <button className="block w-full text-left py-1">Search</button>
           <button className="block w-full text-left py-1">Calendar</button>
           <button className="block w-full text-left py-1">Help</button>
@@ -168,7 +158,7 @@ export default function TopBar() {
           .marquee-track {
             display: flex;
             width: max-content;
-            animation: marqueeScroll 60s linear infinite;
+            animation: marqueeScroll 55s linear infinite;
           }
 
           .marquee-track:hover {
