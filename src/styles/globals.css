@@ -21,3 +21,40 @@ body {
 button {
   cursor: pointer;
 }
+
+/* ===== PREMIUM CARD SYSTEM ===== */
+.card {
+  @apply p-8 bg-white rounded-2xl border shadow-sm 
+  transition-all duration-300;
+}
+
+.card-hover {
+  @apply hover:shadow-xl hover:-translate-y-1 
+  hover:bg-gradient-to-r hover:from-[#2563EB] hover:to-[#1D4ED8];
+}
+
+.card-icon {
+  @apply w-12 h-12 flex items-center justify-center rounded-xl mb-5 
+  bg-[#DBEAFE] text-[#2563EB] transition;
+}
+
+.card-title {
+  @apply text-lg font-semibold mb-3 text-[#0F172A] transition;
+}
+
+.card-text {
+  @apply text-sm text-[#64748B] transition;
+}
+
+/* HOVER STATES */
+.group:hover .card-icon {
+  @apply bg-white/20 text-white;
+}
+
+.group:hover .card-title {
+  @apply text-white;
+}
+
+.group:hover .card-text {
+  @apply text-blue-100;
+}
