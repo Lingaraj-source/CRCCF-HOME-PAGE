@@ -21,7 +21,7 @@ const Innovation = lazy(() => import("../sections/Innovation"));
 const Projects = lazy(() => import("../sections/Projects"));
 const Stats = lazy(() => import("../sections/Stats"));
 const Testimonials = lazy(() => import("../sections/Testimonials"));
-const WhyChooseUs = lazy(() => import("../sections/ImageContent"));
+const WhyChooseUs = lazy(() => import("../sections/WhyChooseUs"));
 const Footer = lazy(() => import("../components/Footer"));
 
 export default function Home() {

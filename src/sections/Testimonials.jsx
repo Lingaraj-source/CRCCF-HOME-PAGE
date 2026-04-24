@@ -1,38 +1,30 @@
-// src/sections/Testimonials.jsx
-
-// PRODUCTION READY TESTIMONIALS
-// ✔ Cards layout
-// ✔ Clean spacing
-// ✔ Avatar + role + review
-// ✔ Responsive
-
 export default function Testimonials() {
   const data = [
     {
-      name: "Aarav Sharma",
-      role: "Computer Science Student",
+      name: "Rohit Kumar",
+      role: "Cybersecurity Intern",
       image: "/assets/user-1.jpg",
-      text: "Amazing experience and great faculty! The learning environment is truly inspiring."
+      text: "The hands-on training and real-world cyber investigation exposure helped me build strong practical skills in cybersecurity."
     },
     {
-      name: "Priya Verma",
-      role: "MBA Graduate",
+      name: "Ananya Das",
+      role: "Software Developer",
       image: "/assets/user-2.jpg",
-      text: "The university helped me build confidence and industry-ready skills."
+      text: "CRCCF's secure development approach and guidance helped me understand how to build scalable and secure applications."
     },
     {
-      name: "Rahul Mehta",
-      role: "Engineering Student",
+      name: "Siddharth Mishra",
+      role: "Digital Forensics Trainee",
       image: "/assets/user-3.jpg",
-      text: "Best decision of my life. The campus and faculty are top-notch."
+      text: "Working on real cybercrime case studies gave me deep insights into digital forensics and investigation techniques."
     }
   ];
 
   return (
-    <section className="bg-white py-20 px-6 md:px-12 lg:px-20">
+    <section className="bg-white py-16">
 
-      {/* HEADING */}
-      <div className="text-center mb-14">
+      {/* HEADER */}
+      <div className="text-center mb-12 px-4 md:px-10 lg:px-20 max-w-[1440px] mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-[#0f172a]">
           Testimonials
         </h2>
@@ -42,20 +34,14 @@ export default function Testimonials() {
       </div>
 
       {/* CARDS */}
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {data.map((item, i) => (
           <div
             key={i}
-            className="
-              bg-[#f8fafc] 
-              p-6 rounded-xl 
-              shadow-sm 
-              hover:shadow-md 
-              transition
-            "
+            className="bg-[#f8fafc] p-6 rounded-xl shadow-sm hover:shadow-md transition"
           >
-            {/* USER */}
+
             <div className="flex items-center gap-4 mb-4">
               <img
                 src={item.image}
@@ -73,7 +59,6 @@ export default function Testimonials() {
               </div>
             </div>
 
-            {/* TEXT */}
             <p className="text-sm text-gray-600 leading-relaxed">
               "{item.text}"
             </p>
