@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   FaBars,
@@ -13,9 +13,24 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const menuRef = useRef(null);
+
+  // ✅ CLOSE MENU ON OUTSIDE CLICK
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 bg-[#0f2b5b] text-white shadow-md">
 
+      {/* ❗ SIZE NOT CHANGED */}
       <div className="px-4 md:px-10 lg:px-20 max-w-[1440px] mx-auto flex items-center justify-between py-5 md:py-6">
 
         {/* LOGO */}
@@ -91,7 +106,7 @@ export default function Navbar() {
 
         </div>
 
-        {/* MOBILE */}
+        {/* MOBILE BUTTON */}
         <button
           className="lg:hidden text-2xl"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -103,7 +118,10 @@ export default function Navbar() {
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div className="lg:hidden bg-[#0f2b5b] px-4 pb-4 space-y-3 text-white text-sm">
+        <div
+          ref={menuRef}
+          className="lg:hidden bg-[#0f2b5b] px-4 pb-4 space-y-3 text-white text-sm"
+        >
 
           {[
             "Home",
@@ -115,12 +133,19 @@ export default function Navbar() {
             "Gallery",
             "Contact",
           ].map((item) => (
-            <div key={item} className="border-b border-white/20 pb-2">
+            <div
+              key={item}
+              className="border-b border-white/20 pb-2 cursor-pointer"
+              onClick={() => setMenuOpen(false)} // ✅ FIX
+            >
               {item}
             </div>
           ))}
 
-          <button className="w-full bg-red-600 py-2 rounded-md mt-3">
+          <button
+            className="w-full bg-red-600 py-2 rounded-md mt-3"
+            onClick={() => setMenuOpen(false)} // ✅ FIX
+          >
             Report Crime
           </button>
 
