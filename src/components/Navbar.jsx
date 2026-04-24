@@ -68,7 +68,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {["Resources", "Recruitment", "Gallery", "Contact"].map((item) => (
+          {["Insights", "Careers", "Gallery", "Contact"].map((item) => (
             <Link key={item} className="hover:text-[#3B82F6] transition">
               {item}
             </Link>
@@ -110,7 +110,7 @@ export default function Navbar() {
             "About Us",
             "Our Services",
             "Skill Development",
-            "Resources",
+            "Insights",
             "Recruitment",
             "Gallery",
             "Contact",

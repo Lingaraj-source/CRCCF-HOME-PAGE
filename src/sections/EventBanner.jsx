@@ -28,8 +28,8 @@ export default function EventBanner() {
             bg-blue-600 text-white rounded-xl 
             px-5 py-6 text-center min-w-[90px]
           ">
-            <p className="text-xs uppercase">Nov</p>
-            <h3 className="text-3xl font-bold leading-none mt-1">15</h3>
+            <p className="text-xs uppercase">May</p>
+            <h3 className="text-3xl font-bold leading-none mt-1">8</h3>
           </div>
 
           {/* TEXT */}
@@ -43,7 +43,7 @@ export default function EventBanner() {
             </span>
 
             <h3 className="text-lg md:text-xl font-semibold text-[#0f172a] mt-2">
-              Autumn Open House & Campus Experience Day
+              Company Inaguration
             </h3>
 
             <p className="text-gray-500 text-sm mt-1 max-w-xl">

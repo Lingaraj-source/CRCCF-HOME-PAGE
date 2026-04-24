@@ -34,7 +34,7 @@ export default function Services() {
     <section className="py-16 bg-[#F1F5F9]">
       <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20">
 
-        {/* ===== HEADER ===== */}
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -55,7 +55,7 @@ export default function Services() {
           </p>
         </motion.div>
 
-        {/* ===== CARDS GRID ===== */}
+        {/* CARDS */}
         <div className="grid md:grid-cols-2 gap-6">
 
           {services.map((item, i) => (
@@ -70,49 +70,42 @@ export default function Services() {
               transition-all duration-300 overflow-hidden"
             >
 
-              {/* subtle background effect */}
+              {/* glow */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#DBEAFE] rounded-full blur-3xl opacity-20"></div>
+
+              {/* overlay (fixed) */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100
+              bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
+              transition duration-300 rounded-2xl -z-10"></div>
 
               {/* CONTENT */}
               <div className="relative z-10 flex items-start gap-4">
 
                 {/* ICON */}
-                <div
-                  className="w-12 h-12 flex items-center justify-center rounded-lg
-                  bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-                  text-white text-lg shadow-md
-                  group-hover:scale-110 transition"
-                >
+                <div className="w-12 h-12 flex items-center justify-center rounded-lg
+                bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
+                text-white text-lg shadow-md
+                group-hover:scale-110 transition">
                   {item.icon}
                 </div>
 
                 {/* TEXT */}
                 <div>
-                  <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-[#2563EB] transition">
+                  <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-white transition">
                     {item.title}
                   </h3>
 
-                  <p className="text-sm text-[#475569] mt-2 leading-relaxed">
+                  <p className="text-sm text-[#475569] mt-2 leading-relaxed group-hover:text-blue-100 transition">
                     {item.desc}
                   </p>
                 </div>
+
               </div>
-
-              {/* HOVER OVERLAY */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100
-                bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-                transition duration-300 rounded-2xl z-0"
-              ></div>
-
-              {/* TEXT COLOR CHANGE ON HOVER */}
-              <div className="absolute inset-0 z-10 pointer-events-none group-hover:text-white transition"></div>
 
             </motion.div>
           ))}
 
         </div>
-
       </div>
     </section>
   );
