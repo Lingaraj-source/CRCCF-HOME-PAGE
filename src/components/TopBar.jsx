@@ -56,12 +56,13 @@ export default function TopBar() {
   const formattedTime = time.toLocaleTimeString("en-IN");
 
   return (
-    <div className="bg-[#0f172a] text-white text-sm relative z-[999]">
+    <div className="bg-[#0f172a] text-white text-sm relative z-[999] w-full">
 
       <div className="flex items-center justify-between px-4 md:px-10 lg:px-20 h-12 md:h-14 gap-3">
 
-        {/* ===== MARQUEE (UNCHANGED) ===== */}
-        <div className="flex-1 overflow-hidden">
+        {/* ===== MARQUEE (FIXED OVERFLOW) ===== */}
+        {/* ADDED min-w-0 here to prevent flex child from breaking mobile width */}
+        <div className="flex-1 min-w-0 overflow-hidden">
           <div className="marquee-wrapper">
             <div className="marquee-track">
 
@@ -84,7 +85,7 @@ export default function TopBar() {
         </div>
 
         {/* ===== RIGHT SIDE ===== */}
-        <div className="flex items-center gap-4 md:gap-5">
+        <div className="flex items-center gap-4 md:gap-5 shrink-0">
 
           {/* SEARCH (DESKTOP) */}
           <div className="relative hidden sm:block" ref={searchRef}>
@@ -112,19 +113,19 @@ export default function TopBar() {
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="Search..."
-                  className="flex-1 outline-none text-xs"
+                  className="flex-1 outline-none text-xs min-w-0"
                 />
 
                 {searchValue && (
                   <FaTimes
                     onClick={() => setSearchValue("")}
-                    className="text-gray-400 cursor-pointer text-xs"
+                    className="text-gray-400 cursor-pointer text-xs shrink-0"
                   />
                 )}
 
                 <button
                   onClick={() => setShowSearch(false)}
-                  className="text-blue-500 text-xs ml-2 font-medium"
+                  className="text-blue-500 text-xs ml-2 font-medium shrink-0"
                 >
                   Close
                 </button>
@@ -148,7 +149,7 @@ export default function TopBar() {
             </button>
 
             {showCalendar && (
-              <div className="fixed top-16 right-4 bg-white text-black p-4 rounded-xl shadow-xl w-52 z-[9999] border">
+              <div className="absolute right-0 top-10 bg-white text-black p-4 rounded-xl shadow-xl w-52 z-[9999] border">
                 <p className="text-xs text-blue-600 font-semibold text-center">
                   {formattedDate}
                 </p>
@@ -189,19 +190,19 @@ export default function TopBar() {
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div className="sm:hidden absolute right-2 top-14 bg-white text-black rounded shadow-md p-3 w-40 z-[9999] text-xs">
+        <div className="sm:hidden absolute right-2 top-12 bg-white text-black rounded-lg shadow-xl p-2 w-40 z-[9999] border border-gray-100">
 
-          <button onClick={() => { setShowSearch(true); setMenuOpen(false); }} className="block py-2">
+          <button onClick={() => { setShowSearch(true); setMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded">
             Search
           </button>
 
-          <button onClick={() => { setShowCalendar(true); setMenuOpen(false); }} className="block py-2">
+          <button onClick={() => { setShowCalendar(true); setMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded">
             Calendar
           </button>
 
-          <button className="block py-2">Help</button>
+          <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded">Help</button>
 
-          <button onClick={() => window.location.href="/contact"} className="block py-2">
+          <button onClick={() => window.location.href="/contact"} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded text-blue-600 font-medium">
             Reach Us
           </button>
 
@@ -210,9 +211,9 @@ export default function TopBar() {
 
       {/* MOBILE SEARCH */}
       {showSearch && (
-        <div className="sm:hidden fixed top-0 left-0 w-full h-16 bg-white z-[9999] shadow-md flex items-center px-3 gap-2 animate-slideDown">
+        <div className="sm:hidden absolute top-0 left-0 w-full h-12 bg-white z-[9999] shadow-md flex items-center px-4 gap-3 animate-slideDown">
 
-          <FaSearch className="text-gray-400 text-sm" />
+          <FaSearch className="text-gray-400 text-sm shrink-0" />
 
           <input
             type="text"
@@ -220,11 +221,11 @@ export default function TopBar() {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search..."
-            className="flex-1 outline-none text-sm"
+            className="flex-1 outline-none text-sm text-black min-w-0"
           />
 
           {searchValue && (
-            <FaTimes onClick={() => setSearchValue("")} className="text-gray-400 text-sm" />
+            <FaTimes onClick={() => setSearchValue("")} className="text-gray-400 text-sm shrink-0" />
           )}
 
           <button
@@ -232,7 +233,7 @@ export default function TopBar() {
               setShowSearch(false);
               setSearchValue("");
             }}
-            className="text-blue-600 text-sm font-medium ml-2"
+            className="text-blue-600 text-sm font-medium ml-2 shrink-0"
           >
             Cancel
           </button>
@@ -242,13 +243,19 @@ export default function TopBar() {
 
       {/* MOBILE CALENDAR */}
       {showCalendar && (
-        <div className="sm:hidden fixed top-20 right-3 bg-white text-black p-4 rounded-xl shadow-xl w-56 z-[9999]">
+        <div className="sm:hidden absolute top-14 right-2 bg-white text-black p-4 rounded-xl shadow-xl w-52 z-[9999] border border-gray-100">
           <p className="text-xs text-blue-600 font-semibold text-center">
             {formattedDate}
           </p>
           <p className="text-lg font-bold text-center mt-1">
             {formattedTime}
           </p>
+          <button 
+            onClick={() => setShowCalendar(false)}
+            className="mt-3 w-full bg-blue-50 text-blue-600 text-xs py-1.5 rounded-lg font-medium"
+          >
+            Close
+          </button>
         </div>
       )}
 
