@@ -57,10 +57,10 @@ export default function Navbar() {
   ];
 
   const skillLinks = [
-    { name: "Training", path: "/skills/training" },
-    { name: "Internship", path: "/skills/internship" },
-    { name: "Awareness Programs", path: "/skills/awareness" },
-    { name: "Certification Course", path: "/skills/certification" },
+    { name: "Training", path: "/training" },
+    { name: "Internship", path: "/internship" },
+    { name: "Awareness Programs", path: "/awareness" },
+    { name: "Certification Course", path: "/certification" },
   ];
 
   return (
