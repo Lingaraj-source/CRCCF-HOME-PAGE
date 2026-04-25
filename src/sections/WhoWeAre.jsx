@@ -45,14 +45,39 @@ export default function WhoWeAre() {
               text: "Building a secure and future-ready digital ecosystem.",
             },
           ].map((item, i) => (
-            <div key={i} className="group card card-hover">
+            <div
+              key={i}
+              className="group relative bg-white border border-[#E2E8F0] rounded-2xl p-6
+    transition-all duration-300 overflow-hidden
+    hover:-translate-y-1 hover:shadow-xl"
+            >
 
-              <div className="card-icon">{item.icon}</div>
+              {/* 🔥 HOVER BACKGROUND FIX */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
+    opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl -z-10"></div>
 
-              <h3 className="card-title">{item.title}</h3>
+              {/* CONTENT */}
+              <div className="relative z-10">
 
-              <p className="card-text">{item.text}</p>
+                {/* ICON */}
+                <div className="w-12 h-12 flex items-center justify-center rounded-lg
+      bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
+      text-white text-lg shadow-md mb-4
+      group-hover:scale-110 transition">
+                  {item.icon}
+                </div>
 
+                {/* TITLE */}
+                <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-white transition">
+                  {item.title}
+                </h3>
+
+                {/* TEXT */}
+                <p className="text-sm text-[#475569] mt-2 leading-relaxed group-hover:text-blue-100 transition">
+                  {item.text}
+                </p>
+
+              </div>
             </div>
           ))}
 

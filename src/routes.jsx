@@ -5,6 +5,9 @@ import { Suspense, lazy } from "react";
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Internship = lazy(() => import("./pages/Internship"));
+
+
 
 function Loader() {
   return (
@@ -22,6 +25,7 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/internship" element={<Internship />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
