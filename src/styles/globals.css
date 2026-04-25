@@ -58,3 +58,198 @@ button {
 .group:hover .card-text {
   @apply text-blue-100;
 }
+/* 🔥 CYBER BACKGROUND */
+/*footer section animation*/
+.cyber-bg {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.15), transparent),
+    radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.15), transparent);
+  animation: moveBg 10s linear infinite alternate;
+}
+
+@keyframes moveBg {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-50px);
+  }
+}
+
+/* 🔥 HEADINGS */
+.heading {
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 2px solid #3b82f6;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+/* 🔥 ANIMATED LINKS */
+.footer-link {
+  display: inline-block;
+  position: relative;
+  color: #cbd5e1;
+  transition: 0.3s;
+}
+
+.footer-link span {
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(to right, #3b82f6, cyan);
+  transition: 0.3s;
+}
+
+.footer-link:hover {
+  color: #60a5fa;
+  text-shadow: 0 0 8px #3b82f6;
+}
+
+.footer-link:hover span {
+  width: 100%;
+}
+
+/* 🔥 BUTTONS */
+.glow-btn {
+  background: rgba(59, 130, 246, 0.8);
+  padding: 8px 20px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.glow-btn:hover {
+  box-shadow: 0 0 15px #3b82f6;
+}
+
+.review-btn {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+
+/* 🔥 SOCIAL ICONS */
+.social {
+  transition: 0.3s;
+}
+
+.social:hover {
+  transform: scale(1.2);
+}
+
+.fb:hover {
+  color: #1877f2;
+  text-shadow: 0 0 8px #1877f2;
+}
+.tw:hover {
+  color: #1da1f2;
+  text-shadow: 0 0 8px #1da1f2;
+}
+.li:hover {
+  color: #0a66c2;
+  text-shadow: 0 0 8px #0a66c2;
+}
+.ig:hover {
+  color: #e4405f;
+  text-shadow: 0 0 8px #e4405f;
+}
+.yt:hover {
+  color: #ff0000;
+  text-shadow: 0 0 8px #ff0000;
+}
+.wa:hover {
+  color: #25d366;
+  text-shadow: 0 0 8px #25d366;
+}
+.tg:hover {
+  color: #0088cc;
+  text-shadow: 0 0 8px #0088cc;
+}
+
+/* 🔥 MAP BUTTON */
+.map-btn {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 10px;
+  background: #3b82f6;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.map-btn:hover {
+  box-shadow: 0 0 12px #3b82f6;
+}
+
+/* 🔥 3D TILT */
+.tilt {
+  transition: transform 0.4s;
+}
+
+.tilt:hover {
+  transform: perspective(800px) rotateX(4deg) rotateY(-4deg);
+}
+
+/* 🔥 LOGO GLOW */
+.glow {
+  filter: drop-shadow(0 0 8px #3b82f6);
+}
+/* 🔥 CYBER FALLING EFFECT */
+.cyber-icons {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cyber-icons span {
+  position: absolute;
+  color: rgba(0, 255, 200, 0.3);
+  font-size: 12px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+/* CYBER ICON RAIN */
+.cyber-icons {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cyber-icons span {
+  position: absolute;
+  top: -40px;
+  color: rgba(0, 255, 200, 0.25);
+  animation: fall linear infinite;
+  user-select: none;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}

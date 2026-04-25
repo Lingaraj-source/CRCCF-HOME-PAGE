@@ -63,7 +63,7 @@ export default function Navbar() {
             About Us
           </Link>
           <Link className="hover:text-[#3B82F6] transition">
-            Our Services
+            Services
           </Link>
 
           {/* DROPDOWN (MERGED VERSION) */}
