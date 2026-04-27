@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
 import MainLayout from "./layouts/MainLayout";
+import ReachUs from "./pages/ReachUs";
+import Gallery from "./pages/Gallery/Gallery";
+import CategoryPage from "./pages/Gallery/CategoryPage";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Home"));
@@ -29,6 +32,9 @@ export default function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/internship" element={<Internship />} />
+            <Route path="/reachus" element={<ReachUs />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/category/:id" element={<CategoryPage/>} />
 
           </Route>
 

@@ -8,7 +8,9 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
+
 import logo from "../assets/logo.png";
+import ReachUs from "../pages/ReachUs";
 
 export default function TopBar() {
   const [showSearch, setShowSearch] = useState(false);
@@ -170,7 +172,7 @@ export default function TopBar() {
 
           {/* REACH US */}
           <button
-            onClick={() => window.location.href = "/contact"}
+            onClick={() => window.location.href = "/reachus"}
             className="hidden sm:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full text-xs md:text-sm"
           >
             <FaGlobe />
@@ -202,7 +204,7 @@ export default function TopBar() {
 
           <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded">Help</button>
 
-          <button onClick={() => window.location.href="/contact"} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded text-blue-600 font-medium">
+          <button onClick={() => window.location.href="/reachus"} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded text-blue-600 font-medium">
             Reach Us
           </button>
 
