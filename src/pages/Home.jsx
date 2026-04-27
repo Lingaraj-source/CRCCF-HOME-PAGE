@@ -1,8 +1,6 @@
 import { Suspense, lazy } from "react";
 
 /* ================= COMPONENTS ================= */
-import TopBar from "../components/TopBar";
-import Navbar from "../components/Navbar";
 
 /* ================= ABOVE THE FOLD ================= */
 import Hero from "../sections/Hero";
@@ -29,8 +27,6 @@ export default function Home() {
     <div className="bg-white text-gray-900">
 
       {/* ================= TOP ================= */}
-      <TopBar />
-      <Navbar />
 
       {/* ================= ABOVE FOLD ================= */}
       <Hero />
@@ -52,7 +48,6 @@ export default function Home() {
         <Stats />
         <Testimonials />
         <WhyChooseUs />
-        <Footer />
 
       </Suspense>
 

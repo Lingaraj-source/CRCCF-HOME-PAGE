@@ -1,122 +1,123 @@
 import { motion } from "framer-motion";
-import {
-  FaBuilding,
-  FaGlobe,
-  FaBrain,
-  FaRocket,
-} from "react-icons/fa";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
+
+/* COUNTER */
+function Counter({ value, inView }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    let start = 0;
+    const duration = 1200;
+    const step = duration / value;
+
+    const timer = setInterval(() => {
+      start += 1;
+      setCount(start);
+      if (start >= value) clearInterval(timer);
+    }, step);
+
+    return () => clearInterval(timer);
+  }, [inView, value]);
+
+  return count;
+}
+
+const projects = [
+  {
+    title: "Cyber Security Dashboard",
+    desc: "Real-time monitoring system",
+    img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1470&auto=format&fit=crop",
+  },
+  {
+    title: "Government Portal",
+    desc: "Secure digital governance",
+    img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1470&auto=format&fit=crop",
+  },
+  {
+    title: "AI Threat Detection",
+    desc: "AI-based cyber defense",
+    img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1470&auto=format&fit=crop",
+  },
+];
 
 export default function Projects() {
+  const { ref, inView } = useInView({ triggerOnce: true });
+
   return (
-    <section className="py-20 bg-gradient-to-br from-[#0F2B5B] to-[#1D4ED8] text-white relative overflow-hidden">
-
-      {/* floating dots */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="w-2 h-2 bg-white rounded-full absolute top-20 left-10"></div>
-        <div className="w-2 h-2 bg-white rounded-full absolute bottom-20 right-20"></div>
-        <div className="w-1 h-1 bg-white rounded-full absolute top-40 right-40"></div>
-      </div>
-
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20 relative z-10 overflow-hidden">
-
-        {/* HEADER */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-12"
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/10 backdrop-blur text-sm">
-            🧪 Projects & Portfolio
-          </span>
-
-          <h2 className="text-3xl md:text-4xl font-bold mt-4">
-            Innovative Solutions for Real Impact
+    <section className="pt-6 md:pt-8 pb-14 md:pb-16 bg-[#F8FAFC]">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20">
+        {/* 🔥 HEADER (FIXED SPACING) */}
+        <div className="mb-12 md:mb-14 max-w-3xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#0F172A] leading-tight">
+            Building <span className="text-[#2563EB]">Real Impact</span> Through
+            Projects
           </h2>
 
-          <p className="text-blue-100 mt-3 max-w-2xl mx-auto">
-            Delivering impactful technology solutions
+          <p className="text-[#64748B] mt-4 md:mt-5">
+            We deliver scalable, secure, and innovative solutions across
+            domains.
           </p>
-        </motion.div>
 
-        {/* TOP CARDS */}
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
-          {[
-            {
-              icon: <FaBuilding />,
-              title: "Government Projects",
-              desc: "Reliable national-level solutions.",
-            },
-            {
-              icon: <FaGlobe />,
-              title: "Multi-Domain",
-              desc: "Solutions across industries.",
-            },
-            {
-              icon: <FaBrain />,
-              title: "Innovation",
-              desc: "Research-driven development.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-white/10 backdrop-blur border border-white/20 p-6 rounded-xl
-              hover:bg-white/20 transition"
-            >
-              <div className="text-2xl mb-3">{item.icon}</div>
-              <h3 className="font-semibold text-lg">{item.title}</h3>
-              <p className="text-blue-100 text-sm mt-2">{item.desc}</p>
-            </div>
-          ))}
-        </div>
+          {/* 🔥 PREMIUM STATS */}
+          <div
+            ref={ref}
+            className="flex justify-center gap-4 md:gap-8 mt-8 flex-wrap"
+          >
+            {[
+              { value: 70, label: "Projects Delivered" },
+              { value: 27, label: "Successfully Completed" },
+              { value: 4, label: "Currently Ongoing" },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="bg-white border border-gray-200 rounded-xl px-5 py-3 shadow-sm hover:shadow-md transition"
+              >
+                <h3 className="text-xl md:text-2xl font-bold text-[#2563EB] text-center">
+                  <Counter value={item.value} inView={inView} />+
+                </h3>
 
-        {/* STATS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {[
-            { label: "Total Projects", value: "70" },
-            { label: "Ongoing", value: "4" },
-            { label: "Completed", value: "27" },
-            { label: "Pending", value: "39" },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="bg-white/10 backdrop-blur p-4 rounded-lg text-center border border-white/20"
-            >
-              <h3 className="text-2xl font-bold">{stat.value}</h3>
-              <p className="text-blue-100 text-xs">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* MAIN CARD */}
-        <div className="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 md:p-8">
-          <div className="flex items-start gap-4">
-
-            <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-white/20">
-              <FaRocket />
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3">
-                Our Commitment
-              </h3>
-
-              <p className="text-blue-100 text-sm leading-relaxed">
-                We develop innovative, scalable, and secure solutions across multiple domains.
-              </p>
-
-              <div className="flex flex-wrap gap-2 mt-4">
-                {["Innovative 💡", "Secure 🔐", "Scalable 🚀"].map((tag, i) => (
-                  <span key={i} className="px-3 py-1 bg-white/20 rounded-full text-xs">
-                    {tag}
-                  </span>
-                ))}
+                <p className="text-xs md:text-sm text-[#64748B] text-center mt-1">
+                  {item.label}
+                </p>
               </div>
-            </div>
-
+            ))}
           </div>
         </div>
 
+        {/* 🔥 PROJECT GRID (TIGHTER GAP) */}
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          {projects.map((project, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.15 }}
+              whileHover={{ y: -8 }}
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition"
+            >
+              {/* IMAGE */}
+              <div className="overflow-hidden">
+                <img
+                  src={project.img}
+                  alt={project.title}
+                  className="h-48 w-full object-cover hover:scale-105 transition duration-500"
+                />
+              </div>
+
+              {/* CONTENT */}
+              <div className="p-5">
+                <h3 className="text-base md:text-lg font-semibold text-[#0F172A]">
+                  {project.title}
+                </h3>
+
+                <p className="text-[#64748B] text-sm mt-2">{project.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

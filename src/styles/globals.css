@@ -1,186 +1,41 @@
 @import "tailwindcss";
 
-/* ===== BASE ===== */
+:root {
+  --navy: #0F172A;
+  --primary: #2563EB;
+  --lightBg: #F8FAFC;
+}
+
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: var(--lightBg);
+  color: var(--navy);
 }
 
-/* ===== SAFE TRANSITIONS (NOT GLOBAL) ===== */
-button,
-a,
-.card,
-.social,
-.glow-btn {
-  transition: all 0.2s ease-in-out;
+/* Smooth Entrance Animation */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* ===== SHADOW ===== */
-.shadow-soft {
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-}
-
-/* ===== CARD SYSTEM ===== */
-.card {
-  @apply p-8 bg-white rounded-2xl border shadow-sm 
-  transition duration-300;
-}
-
-.card-hover {
-  @apply hover:shadow-xl hover:-translate-y-1 
-  hover:bg-gradient-to-r hover:from-[#2563EB] hover:to-[#1D4ED8];
-}
-
-.card-icon {
-  @apply w-12 h-12 flex items-center justify-center rounded-xl mb-5 
-  bg-[#DBEAFE] text-[#2563EB] transition-colors;
-}
-
-.card-title {
-  @apply text-lg font-semibold mb-3 text-[#0F172A] transition-colors;
-}
-
-.card-text {
-  @apply text-sm text-[#64748B] transition-colors;
-}
-
-/* ===== HOVER STATES ===== */
-.group:hover .card-icon {
-  @apply bg-white/20 text-white;
-}
-
-.group:hover .card-title {
-  @apply text-white;
-}
-
-.group:hover .card-text {
-  @apply text-blue-100;
-}
-
-/* ===== CYBER BACKGROUND ===== */
-.cyber-bg {
-  background:
-    radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.15), transparent),
-    radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.15), transparent);
-  animation: moveBg 10s linear infinite alternate;
-}
-
-@keyframes moveBg {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-50px); }
-}
-
-/* ===== HEADINGS ===== */
-.heading {
-  font-size: 18px;
-  font-weight: 600;
-  border-bottom: 2px solid #3b82f6;
-  display: inline-block;
-  padding-bottom: 4px;
-}
-
-/* ===== FOOTER LINKS ===== */
-.footer-link {
-  position: relative;
-  color: #cbd5e1;
-}
-
-.footer-link span {
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-  height: 2px;
-  width: 0;
-  background: linear-gradient(to right, #3b82f6, cyan);
-  transition: width 0.3s;
-}
-
-.footer-link:hover {
-  color: #60a5fa;
-}
-
-.footer-link:hover span {
-  width: 100%;
-}
-
-/* ===== BUTTONS ===== */
-.glow-btn {
-  background: rgba(59, 130, 246, 0.8);
-  padding: 8px 20px;
-  border-radius: 6px;
-}
-
-.glow-btn:hover {
-  box-shadow: 0 0 15px #3b82f6;
-}
-
-.review-btn {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 8px 20px;
-  border-radius: 6px;
-}
-
-/* ===== SOCIAL ===== */
-.social:hover {
-  transform: scale(1.2);
-}
-
-/* ===== MAP ===== */
-.map-btn {
-  display: inline-flex;
-  gap: 6px;
-  margin-top: 10px;
-  background: #3b82f6;
-  padding: 8px 14px;
-  border-radius: 6px;
-}
-
-.map-btn:hover {
-  box-shadow: 0 0 12px #3b82f6;
-}
-
-/* ===== TILT ===== */
-.tilt {
-  transition: transform 0.4s;
-}
-
-.tilt:hover {
-  transform: perspective(800px) rotateX(4deg) rotateY(-4deg);
-}
-
-/* ===== LOGO ===== */
-.glow {
-  filter: drop-shadow(0 0 8px #3b82f6);
-}
-
-/* ===== CYBER ICON RAIN ===== */
-.cyber-icons {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.cyber-icons span {
-  position: absolute;
-  top: -40px;
-  color: rgba(0, 255, 200, 0.25);
-  animation: fall linear infinite;
-  user-select: none;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-40px);
-    opacity: 0;
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  20% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(120vh);
-    opacity: 0;
-  }
+}
+
+/* Professional Card Styling */
+.card-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--lightBg); }
+::-webkit-scrollbar-thumb {
+  background: var(--navy);
+  border-radius: 10px;
+  border: 2px solid var(--lightBg);
 }

@@ -56,7 +56,7 @@ export default function TopBar() {
   const formattedTime = time.toLocaleTimeString("en-IN");
 
   return (
-    <div className="bg-[#0f172a] text-white text-sm relative z-[999] w-full">
+    <div className="sticky top-0 bg-[#0f172a] text-white text-sm z-[60] w-full">
 
       <div className="flex items-center justify-between px-4 md:px-10 lg:px-20 h-12 md:h-14 gap-3">
 

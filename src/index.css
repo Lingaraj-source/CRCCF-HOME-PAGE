@@ -1,59 +1,23 @@
 @import "tailwindcss";
 
-/* ===== BASE RESET ===== */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* ===== HTML + BODY FIX ===== */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* 🔥 FIX RIGHT GAP */
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
-/* Prevent zoom/layout bugs */
-body {
-  position: relative;
-  font-family: 'Inter', sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
-}
-
-/* ===== MEDIA FIX ===== */
-img, video {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-/* ===== SECTION SAFETY ===== */
 section {
   width: 100%;
-  overflow-x: hidden;
+  position: relative;
 }
 
-/* ===== CUSTOM SHADOW ===== */
-.shadow-soft {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-/* ===== SCROLLBAR (PREMIUM) ===== */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2563eb;
-  border-radius: 10px;
-}
-* {
-  outline: 5px  solid red;
+.text-navy {
+  color: #0F172A;
 }

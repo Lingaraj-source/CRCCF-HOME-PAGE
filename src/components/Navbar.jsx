@@ -1,17 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import {
-  FaBars,
-  FaTimes,
-  FaBell,
-  FaChevronDown,
-} from "react-icons/fa";
+import { FaBars, FaTimes, FaBell, FaChevronDown } from "react-icons/fa";
 
 import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false); // ✅ NEW
 
   const menuRef = useRef(null);
 
@@ -28,11 +24,8 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0f2b5b] text-white shadow-md">
-
-      {/* ❗ SIZE NOT CHANGED */}
+    <header className="sticky top-[48px] md:top-[56px] z-50 bg-[#0f2b5b] text-white shadow-md">
       <div className="px-4 md:px-10 lg:px-20 max-w-[1440px] mx-auto flex items-center justify-between py-5 md:py-6">
-
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-5">
           <img
@@ -53,12 +46,15 @@ export default function Navbar() {
 
         {/* DESKTOP NAV */}
         <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
-
-          {["Home", "About Us", "Our Services"].map((item) => (
-            <Link key={item} className="hover:text-[#3B82F6] transition">
-              {item}
-            </Link>
-          ))}
+          <Link to="/" className="hover:text-[#3B82F6] transition">
+            Home
+          </Link>
+          <Link to="/about" className="hover:text-[#3B82F6] transition">
+            About Us
+          </Link>
+          <Link to="/services" className="hover:text-[#3B82F6] transition">
+            Our Services
+          </Link>
 
           {/* DROPDOWN */}
           <div
@@ -71,28 +67,52 @@ export default function Navbar() {
             </button>
 
             <div
-              className={`absolute left-0 mt-3 w-56 bg-white text-black rounded-lg shadow-lg transition ${
-                dropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
-              }`}
+              className={`absolute left-0 top-full w-56 bg-white text-black rounded-lg shadow-lg transition ${dropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
             >
-              {["Training", "Internship", "Awareness Programs", "Certification Course"].map((item) => (
-                <div key={item} className="px-4 py-2 hover:bg-blue-50 text-sm cursor-pointer">
-                  {item}
-                </div>
-              ))}
+              <Link
+                to="/training"
+                className="block px-4 py-2 hover:bg-blue-50 text-sm"
+              >
+                Training
+              </Link>
+              <Link
+                to="/internship"
+                className="block px-4 py-2 hover:bg-blue-50 text-sm"
+              >
+                Internship
+              </Link>
+              <Link
+                to="/awareness"
+                className="block px-4 py-2 hover:bg-blue-50 text-sm"
+              >
+                Awareness Programs
+              </Link>
+              <Link
+                to="/certification"
+                className="block px-4 py-2 hover:bg-blue-50 text-sm"
+              >
+                Certification Course
+              </Link>
             </div>
           </div>
 
-          {["Insights", "Careers", "Gallery", "Contact"].map((item) => (
-            <Link key={item} className="hover:text-[#3B82F6] transition">
-              {item}
-            </Link>
-          ))}
+          <Link to="/insights" className="hover:text-[#3B82F6] transition">
+            Insights
+          </Link>
+          <Link to="/careers" className="hover:text-[#3B82F6] transition">
+            Careers
+          </Link>
+          <Link to="/gallery" className="hover:text-[#3B82F6] transition">
+            Gallery
+          </Link>
+          <Link to="/contact" className="hover:text-[#3B82F6] transition">
+            Contact
+          </Link>
         </nav>
 
         {/* RIGHT */}
         <div className="hidden lg:flex items-center gap-5">
-
           <div className="relative cursor-pointer">
             <FaBell size={20} />
             <span className="absolute -top-1 -right-1 bg-red-500 text-xs px-1 rounded-full">
@@ -103,7 +123,6 @@ export default function Navbar() {
           <button className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-md text-sm font-semibold transition shadow-sm">
             Report Crime
           </button>
-
         </div>
 
         {/* MOBILE BUTTON */}
@@ -113,7 +132,6 @@ export default function Navbar() {
         >
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
-
       </div>
 
       {/* MOBILE MENU */}
@@ -122,33 +140,113 @@ export default function Navbar() {
           ref={menuRef}
           className="lg:hidden bg-[#0f2b5b] px-4 pb-4 space-y-3 text-white text-sm"
         >
+          <Link
+            to="/"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            About Us
+          </Link>
+          <Link
+            to="/services"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Our Services
+          </Link>
 
-          {[
-            "Home",
-            "About Us",
-            "Our Services",
-            "Skill Development",
-            "Insights",
-            "Recruitment",
-            "Gallery",
-            "Contact",
-          ].map((item) => (
+          {/* ✅ MOBILE DROPDOWN (CLICK WORKING) */}
+          <div className="border-b border-white/20 pb-2">
             <div
-              key={item}
-              className="border-b border-white/20 pb-2 cursor-pointer"
-              onClick={() => setMenuOpen(false)} // ✅ FIX
+              className="flex items-center justify-between cursor-pointer"
+              onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
             >
-              {item}
+              <span>Skill Development</span>
+              <FaChevronDown
+                size={14}
+                className={`transition-transform ${mobileDropdownOpen ? "rotate-180" : ""}`}
+              />
             </div>
-          ))}
+
+            {mobileDropdownOpen && (
+              <div className="ml-4 mt-3 space-y-3 text-white/80 text-sm">
+                <Link
+                  to="/training"
+                  className="block py-1 hover:text-[#3B82F6]"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Training
+                </Link>
+
+                <Link
+                  to="/internship"
+                  className="block py-1 hover:text-[#3B82F6]"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Internship
+                </Link>
+
+                <Link
+                  to="/awareness"
+                  className="block py-1 hover:text-[#3B82F6]"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Awareness Programs
+                </Link>
+
+                <Link
+                  to="/certification"
+                  className="block py-1 hover:text-[#3B82F6]"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Certification Course
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <Link
+            to="/insights"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Insights
+          </Link>
+          <Link
+            to="/careers"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Careers
+          </Link>
+          <Link
+            to="/gallery"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Gallery
+          </Link>
+          <Link
+            to="/contact"
+            className="block border-b border-white/20 pb-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </Link>
 
           <button
             className="w-full bg-red-600 py-2 rounded-md mt-3"
-            onClick={() => setMenuOpen(false)} // ✅ FIX
+            onClick={() => setMenuOpen(false)}
           >
             Report Crime
           </button>
-
         </div>
       )}
     </header>
