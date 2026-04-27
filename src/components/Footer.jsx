@@ -18,137 +18,120 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-[#0d2c54] text-white overflow-hidden">
-      {/* 🔥 CYBER ICON RAIN */}
-      <div className="cyber-icons">
+
+      {/* SAFE CYBER ICON RAIN */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({ length: 18 }).map((_, i) => (
           <span
             key={i}
             style={{
-              left: `${Math.random() * 100}%`,
+              left: `${Math.random() * 90}vw`, // ✅ FIXED
               animationDuration: `${6 + Math.random() * 6}s`,
               animationDelay: `${Math.random() * 5}s`,
               fontSize: `${12 + Math.random() * 10}px`,
             }}
+            className="absolute top-[-40px] text-[rgba(0,255,200,0.25)] animate-[fall_linear_infinite]"
           >
             {icons[Math.floor(Math.random() * icons.length)]}
           </span>
         ))}
       </div>
 
-      {/* 🔥 CONTENT */}
-      <div className="relative z-10 pt-16 pb-8 px-3 md:px-24">
+      {/* CONTENT */}
+      <div className="relative z-10 pt-16 pb-8 px-4 md:px-12 lg:px-20 max-w-[1440px] mx-auto">
+
         {/* GRID */}
-        <div className="grid md:grid-cols-3 gap-16 border-b border-white/20 pb-12">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-16 border-b border-white/20 pb-12">
+
           {/* LOGO */}
-          <div className="tilt">
-            <img src={logo} alt="CRCCF" className="w-24 mb-4 glow" />
-            <p className="text-gray-300 leading-relaxed text-[15px]">
-              CR Cyber Crime Foundation is highly professional and efficient in
-              their work. They not only create strong awareness against
-              cybercrimes but also deliver excellent IT services like Java,
-              Python, MERN stack development, SEO, and digital marketing.
+          <div>
+            <img src={logo} alt="CRCCF" className="w-24 mb-4" />
+            <p className="text-gray-300 text-sm leading-relaxed">
+              CR Cyber Crime Foundation provides awareness, cybersecurity support,
+              and modern IT services including development, SEO, and digital solutions.
             </p>
           </div>
 
           {/* LINKS */}
-          <div className="tilt">
-            <h3 className="heading">Useful Links</h3>
+          <div>
+            <h3 className="text-lg font-semibold border-b border-blue-500 inline-block pb-1">
+              Useful Links
+            </h3>
 
-            <div className="grid grid-cols-2 gap-x-20 gap-y-5 mt-5 text-[15px]">
+            <div className="grid grid-cols-2 gap-x-10 gap-y-4 mt-5 text-sm">
               {[
                 { name: "Home", path: "/" },
                 { name: "About Us", path: "/about" },
-                { name: "Education & Internship", path: "/internship" },
-                { name: "IT and Software", path: "/it" },
-                { name: "Recruitment Process", path: "/recruitment" },
-                { name: "Resources & Download", path: "/resources" },
-                { name: "Cyber Awareness", path: "/awareness" },
+                { name: "Internship", path: "/internship" },
+                { name: "IT Services", path: "/it" },
+                { name: "Recruitment", path: "/recruitment" },
+                { name: "Resources", path: "/resources" },
+                { name: "Awareness", path: "/awareness" },
                 { name: "Gallery", path: "/gallery" },
-                { name: "Report a Cyber Crime", path: "/report" },
-                { name: "Contact Us", path: "/contact" },
+                { name: "Report Crime", path: "/report" },
+                { name: "Contact", path: "/contact" },
               ].map((item, i) => (
-                <Link key={i} to={item.path} className="footer-link">
+                <Link key={i} to={item.path} className="text-gray-300 hover:text-blue-400">
                   {item.name}
-                  <span></span>
                 </Link>
               ))}
             </div>
           </div>
 
           {/* CONTACT */}
-          <div className="tilt">
-            <h3 className="heading">Contact</h3>
+          <div>
+            <h3 className="text-lg font-semibold border-b border-blue-500 inline-block pb-1">
+              Contact
+            </h3>
 
-            <div className="space-y-6 text-gray-300 text-[15px] mt-5">
-              <div className="flex items-start gap-2">
+            <div className="space-y-4 text-gray-300 text-sm mt-5">
+              <div className="flex gap-2">
                 <MdLocationOn className="text-blue-400 mt-1" />
                 <span>
-                  Head Office: Office No. 433, DLF Cyber City, Near Infocity,
-                  Chandaka Industrial Estate, Patia, Bhubaneswar – 751024,
-                  Odisha, India.
+                  DLF Cyber City, Patia, Bhubaneswar – 751024
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex gap-2">
                 <MdPhone className="text-blue-400" />
                 <span>+91 9777999529</span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex gap-2">
                 <MdEmail className="text-blue-400" />
                 <span>hr@crcybercrime.org</span>
               </div>
-
-              <a
-                href="https://www.google.com/maps?q=DLF+Cyber+City+Bhubaneswar"
-                target="_blank"
-                className="map-btn"
-              >
-                <MdLocationOn /> Map
-              </a>
             </div>
           </div>
+
         </div>
 
-        {/* BUTTONS + SOCIAL */}
-        <div className="flex flex-col md:flex-row justify-between items-center mt-4 gap-2">
+        {/* SOCIAL */}
+        <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+
           <div className="flex gap-4 flex-wrap">
-            <button className="glow-btn">⚠ Emergency Report</button>
-            <button className="review-btn">Add Your Review</button>
+            <button className="bg-blue-600 px-4 py-2 rounded">Emergency</button>
+            <button className="bg-white/20 px-4 py-2 rounded">Review</button>
           </div>
 
           <div className="flex gap-5 text-lg">
-            <a href="#" className="social fb">
-              <FaFacebookF />
-            </a>
-            <a href="#" className="social tw">
-              <FaTwitter />
-            </a>
-            <a href="#" className="social li">
-              <FaLinkedinIn />
-            </a>
-            <a href="#" className="social ig">
-              <FaInstagram />
-            </a>
-            <a href="#" className="social yt">
-              <FaYoutube />
-            </a>
-            <a href="#" className="social wa">
-              <FaWhatsapp />
-            </a>
-            <a href="#" className="social tg">
-              <FaTelegramPlane />
-            </a>
-            <a href="#" className="social web">
-              <FaGlobe />
-            </a>
+            <FaFacebookF />
+            <FaTwitter />
+            <FaLinkedinIn />
+            <FaInstagram />
+            <FaYoutube />
+            <FaWhatsapp />
+            <FaTelegramPlane />
+            <FaGlobe />
           </div>
+
         </div>
 
         {/* COPYRIGHT */}
-        <div className="text-center text-gray-400 text-sm mt-8 border-t border-white/20 pt-5">
-          © 2026 CR CYBER CRIME FOUNDATION. All rights reserved.
+        <div className="text-center text-gray-400 text-sm mt-6">
+          © 2026 CR Cyber Crime Foundation
         </div>
+
       </div>
     </footer>
   );

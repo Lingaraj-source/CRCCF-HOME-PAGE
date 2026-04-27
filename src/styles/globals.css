@@ -1,31 +1,30 @@
 @import "tailwindcss";
 
-/* Typography upgrade */
+/* ===== BASE ===== */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f8fafc;
   color: #0f172a;
 }
 
-/* Better shadows */
+/* ===== SAFE TRANSITIONS (NOT GLOBAL) ===== */
+button,
+a,
+.card,
+.social,
+.glow-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+/* ===== SHADOW ===== */
 .shadow-soft {
   box-shadow: 0 8px 25px rgba(0,0,0,0.06);
 }
 
-/* Smooth UI feel */
-* {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Buttons polish */
-button {
-  cursor: pointer;
-}
-
-/* ===== PREMIUM CARD SYSTEM ===== */
+/* ===== CARD SYSTEM ===== */
 .card {
   @apply p-8 bg-white rounded-2xl border shadow-sm 
-  transition-all duration-300;
+  transition duration-300;
 }
 
 .card-hover {
@@ -35,18 +34,18 @@ button {
 
 .card-icon {
   @apply w-12 h-12 flex items-center justify-center rounded-xl mb-5 
-  bg-[#DBEAFE] text-[#2563EB] transition;
+  bg-[#DBEAFE] text-[#2563EB] transition-colors;
 }
 
 .card-title {
-  @apply text-lg font-semibold mb-3 text-[#0F172A] transition;
+  @apply text-lg font-semibold mb-3 text-[#0F172A] transition-colors;
 }
 
 .card-text {
-  @apply text-sm text-[#64748B] transition;
+  @apply text-sm text-[#64748B] transition-colors;
 }
 
-/* HOVER STATES */
+/* ===== HOVER STATES ===== */
 .group:hover .card-icon {
   @apply bg-white/20 text-white;
 }
@@ -58,8 +57,8 @@ button {
 .group:hover .card-text {
   @apply text-blue-100;
 }
-/* 🔥 CYBER BACKGROUND */
-/*footer section animation*/
+
+/* ===== CYBER BACKGROUND ===== */
 .cyber-bg {
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.15), transparent),
@@ -68,15 +67,11 @@ button {
 }
 
 @keyframes moveBg {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-50px);
-  }
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-50px); }
 }
 
-/* 🔥 HEADINGS */
+/* ===== HEADINGS ===== */
 .heading {
   font-size: 18px;
   font-weight: 600;
@@ -85,12 +80,10 @@ button {
   padding-bottom: 4px;
 }
 
-/* 🔥 ANIMATED LINKS */
+/* ===== FOOTER LINKS ===== */
 .footer-link {
-  display: inline-block;
   position: relative;
   color: #cbd5e1;
-  transition: 0.3s;
 }
 
 .footer-link span {
@@ -100,24 +93,22 @@ button {
   height: 2px;
   width: 0;
   background: linear-gradient(to right, #3b82f6, cyan);
-  transition: 0.3s;
+  transition: width 0.3s;
 }
 
 .footer-link:hover {
   color: #60a5fa;
-  text-shadow: 0 0 8px #3b82f6;
 }
 
 .footer-link:hover span {
   width: 100%;
 }
 
-/* 🔥 BUTTONS */
+/* ===== BUTTONS ===== */
 .glow-btn {
   background: rgba(59, 130, 246, 0.8);
   padding: 8px 20px;
   border-radius: 6px;
-  transition: 0.3s;
 }
 
 .glow-btn:hover {
@@ -130,45 +121,12 @@ button {
   border-radius: 6px;
 }
 
-/* 🔥 SOCIAL ICONS */
-.social {
-  transition: 0.3s;
-}
-
+/* ===== SOCIAL ===== */
 .social:hover {
   transform: scale(1.2);
 }
 
-.fb:hover {
-  color: #1877f2;
-  text-shadow: 0 0 8px #1877f2;
-}
-.tw:hover {
-  color: #1da1f2;
-  text-shadow: 0 0 8px #1da1f2;
-}
-.li:hover {
-  color: #0a66c2;
-  text-shadow: 0 0 8px #0a66c2;
-}
-.ig:hover {
-  color: #e4405f;
-  text-shadow: 0 0 8px #e4405f;
-}
-.yt:hover {
-  color: #ff0000;
-  text-shadow: 0 0 8px #ff0000;
-}
-.wa:hover {
-  color: #25d366;
-  text-shadow: 0 0 8px #25d366;
-}
-.tg:hover {
-  color: #0088cc;
-  text-shadow: 0 0 8px #0088cc;
-}
-
-/* 🔥 MAP BUTTON */
+/* ===== MAP ===== */
 .map-btn {
   display: inline-flex;
   gap: 6px;
@@ -182,7 +140,7 @@ button {
   box-shadow: 0 0 12px #3b82f6;
 }
 
-/* 🔥 3D TILT */
+/* ===== TILT ===== */
 .tilt {
   transition: transform 0.4s;
 }
@@ -191,39 +149,12 @@ button {
   transform: perspective(800px) rotateX(4deg) rotateY(-4deg);
 }
 
-/* 🔥 LOGO GLOW */
+/* ===== LOGO ===== */
 .glow {
   filter: drop-shadow(0 0 8px #3b82f6);
 }
-/* 🔥 CYBER FALLING EFFECT */
-.cyber-icons {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
 
-.cyber-icons span {
-  position: absolute;
-  color: rgba(0, 255, 200, 0.3);
-  font-size: 12px;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110%);
-    opacity: 0;
-  }
-}
-/* CYBER ICON RAIN */
+/* ===== CYBER ICON RAIN ===== */
 .cyber-icons {
   position: absolute;
   inset: 0;
