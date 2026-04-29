@@ -1,136 +1,235 @@
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import {
   FaShieldAlt,
-  FaUserGraduate,
+  FaLaptopCode,
   FaBrain,
-  FaChalkboardTeacher,
+  FaUserTie,
   FaGlobe,
   FaLock,
   FaRocket,
   FaChartLine,
   FaUsers,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 export default function WhyChooseUs() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
   const features = [
     {
+      title: "Industry-Focused Cybersecurity",
+      desc: "We combine deep cybersecurity knowledge with real-world application, focusing on practical solutions to tackle modern cyber threats.",
       icon: <FaShieldAlt />,
-      title: "Industry-Focused Cybersecurity Expertise",
-      text: "We combine deep cybersecurity knowledge with real-world application, focusing on practical solutions to tackle modern cyber threats effectively.",
     },
     {
-      icon: <FaUserGraduate />,
-      title: "Practical Learning & Real-Time Exposure",
-      text: "Hands-on experience through live projects, case studies, and real-time problem-solving to build industry-ready skills.",
+      title: "Practical Learning",
+      desc: "Hands-on experience through live projects, case studies, and real-time problem-solving to build industry-ready skills.",
+      icon: <FaLaptopCode />,
     },
     {
-      icon: <FaBrain />,
       title: "Research-Driven Approach",
-      text: "Continuous research and analysis to stay updated with evolving cyber trends and deliver future-ready knowledge.",
+      desc: "Continuous research and analysis to stay updated with evolving cyber trends and deliver future-ready knowledge.",
+      icon: <FaBrain />,
     },
     {
-      icon: <FaChalkboardTeacher />,
-      title: "Expert Mentorship & Guidance",
-      text: "Experienced mentors provide continuous support, industry insights, and structured guidance for growth.",
+      title: "Expert Mentorship",
+      desc: "Experienced mentors provide continuous support, industry insights, and structured guidance for your professional growth.",
+      icon: <FaUserTie />,
     },
     {
-      icon: <FaGlobe />,
       title: "Multi-Domain Expertise",
-      text: "Cybersecurity, digital investigation, software development, and digital marketing under one platform.",
+      desc: "Cybersecurity, digital investigation, software development, and digital marketing unified under one comprehensive platform.",
+      icon: <FaGlobe />,
     },
     {
-      icon: <FaLock />,
       title: "Focus on Security & Ethics",
-      text: "Solutions built on ethical practices, security, privacy, and responsible technology usage.",
+      desc: "All our solutions are fundamentally built on ethical practices, strict security protocols, and responsible technology usage.",
+      icon: <FaLock />,
     },
     {
-      icon: <FaRocket />,
       title: "Career-Oriented Programs",
-      text: "Training and internships designed to bridge the gap between academics and industry requirements.",
+      desc: "Targeted training and internships specifically designed to bridge the gap between academic knowledge and industry demands.",
+      icon: <FaRocket />,
     },
     {
+      title: "Proven Project Experience",
+      desc: "A track record of multiple national and international projects showcasing our platform's reliability and massive scalability.",
       icon: <FaChartLine />,
-      title: "Proven Work & Project Experience",
-      text: "Multiple national and international projects showcasing reliability and scalability.",
     },
     {
+      title: "Supportive Environment",
+      desc: "A collaborative ecosystem where learners consistently grow through interaction, peer mentorship, and continuous improvement.",
       icon: <FaUsers />,
-      title: "Supportive Learning Environment",
-      text: "Collaborative ecosystem where learners grow through interaction, mentorship, and continuous improvement.",
     },
   ];
 
+  const totalCards = features.length;
+
+  // Premium Auto-Play Logic
+  useEffect(() => {
+    if (isHovered) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev === totalCards - 1 ? 0 : prev + 1));
+    }, 3500); // Smoothly glides every 3.5 seconds
+
+    return () => clearInterval(interval);
+  }, [isHovered, totalCards]);
+
+  const slideLeft = () => {
+    setActiveIndex((prev) => (prev === 0 ? totalCards - 1 : prev - 1));
+  };
+
+  const slideRight = () => {
+    setActiveIndex((prev) => (prev === totalCards - 1 ? 0 : prev + 1));
+  };
+
+  // Calculates how far to move the track based on the active index
+  // Assumes a card width of roughly 340px + 24px gap = 364px shift
+  const trackOffset = -(activeIndex * 364);
+
   return (
-    <section className="py-16 bg-[#F8FAFC]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20">
+    <section className="py-20 bg-[#F8FAFC] font-sans relative overflow-hidden">
+      {/* Subtle Background Elements */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-100/40 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-50/40 blur-[120px] rounded-full pointer-events-none" />
 
-        {/* HEADER */}
-        <div className="text-center mb-12">
-          <span className="px-4 py-1 bg-[#DBEAFE] text-[#2563EB] rounded-full text-sm">
-            Why Choose Us 🚀
-          </span>
+      <div className="max-w-[1440px] mx-auto px-4 md:px-12 relative z-10">
+        {/* ================= HEADER ================= */}
+        {/* Reduced mb-14 to mb-8 to close the gap between text and cards */}
+        <div className="text-center max-w-3xl mx-auto mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[11px] sm:text-xs font-bold tracking-[0.15em] uppercase mb-4"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            Why Choose Us
+          </motion.div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A] mt-4">
-            Building Trust Through Expertise & Innovation
-          </h2>
+          {/* Changed font-black to font-extrabold and slate-900 to slate-800 for a cleaner look */}
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight leading-tight"
+          >
+            Building Trust Through <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+              Expertise & Innovation
+            </span>
+          </motion.h2>
 
-          <p className="text-[#64748B] mt-3 max-w-2xl mx-auto text-sm md:text-base">
-            At CR Cyber Crime Foundation (CRCCF), we go beyond traditional learning by integrating cybersecurity, research, and real-world applications to create impactful solutions.
-          </p>
+          {/* Increased text size to text-base/text-lg for better reading */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
+          >
+            At CR Cyber Crime Foundation, we go beyond traditional learning by
+            integrating cybersecurity, research, and real-world applications.
+          </motion.p>
         </div>
 
-        {/* GRID */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* ================= ANIMATED CAROUSEL AREA ================= */}
+        {/* Removed extra vertical padding (py-10) to pull cards closer to text */}
+        <div
+          className="relative group px-2 md:px-4 py-4"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Navigation Arrows */}
+          <button
+            onClick={slideLeft}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.1)] flex items-center justify-center text-slate-600 hover:text-blue-600 hover:border-blue-300 hover:scale-110 transition-all duration-300 active:scale-95"
+          >
+            <FaChevronLeft className="text-sm" />
+          </button>
 
-          {features.map((item, i) => (
-            <div
-              key={i}
-              className="group relative bg-white border border-[#E2E8F0] rounded-2xl p-6
-              hover:-translate-y-1 hover:shadow-xl transition-all duration-300 overflow-hidden"
+          <button
+            onClick={slideRight}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.1)] flex items-center justify-center text-slate-600 hover:text-blue-600 hover:border-blue-300 hover:scale-110 transition-all duration-300 active:scale-95"
+          >
+            <FaChevronRight className="text-sm" />
+          </button>
+
+          {/* Framer Motion Animated Track */}
+          <div className="overflow-hidden w-full relative h-[420px] flex items-center">
+            {/* The Track that slides left/right */}
+            <motion.div
+              animate={{ x: trackOffset }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 30,
+                mass: 1,
+              }}
+              className="flex gap-6 absolute left-1/2 lg:left-[calc(50%-170px)]"
+              // Centers the active card in the viewport
             >
+              {features.map((item, index) => {
+                const isActive = index === activeIndex;
 
-              {/* HOVER BG */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-              opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl -z-10"></div>
+                return (
+                  <motion.div
+                    key={index}
+                    onClick={() => setActiveIndex(index)}
+                    animate={{
+                      scale: isActive ? 1.05 : 0.85,
+                      opacity: isActive ? 1 : 0.4,
+                    }}
+                    transition={{ duration: 0.4 }}
+                    className={`shrink-0 w-[300px] sm:w-[340px] h-[350px] relative bg-white border rounded-3xl p-8 transition-colors duration-300 flex flex-col cursor-pointer ${
+                      isActive
+                        ? "border-blue-200 shadow-[0_20px_50px_rgba(37,99,235,0.15)] z-20"
+                        : "border-slate-100 shadow-sm z-10 hover:border-blue-100 hover:opacity-70"
+                    }`}
+                  >
+                    {/* Glowing Top Line for Active Card */}
+                    {isActive && (
+                      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-t-3xl" />
+                    )}
 
-              <div className="relative z-10">
+                    {/* Icon Container */}
+                    <div
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 transition-all duration-500 ${
+                        isActive
+                          ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                          : "bg-slate-50 text-blue-400 border border-slate-100"
+                      }`}
+                    >
+                      {item.icon}
+                    </div>
 
-                {/* ICON */}
-                <div className="w-12 h-12 flex items-center justify-center rounded-lg
-                bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-                text-white text-lg shadow-md mb-4
-                group-hover:scale-110 transition">
-                  {item.icon}
-                </div>
+                    {/* Typography - Cleaner font weights */}
+                    <h3
+                      className={`text-xl font-bold mb-3 leading-tight transition-colors duration-300 ${
+                        isActive ? "text-slate-800" : "text-slate-600"
+                      }`}
+                    >
+                      {item.title}
+                    </h3>
 
-                {/* TITLE */}
-                <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-white transition">
-                  {item.title}
-                </h3>
-
-                {/* TEXT */}
-                <p className="text-sm text-[#475569] mt-2 leading-relaxed group-hover:text-blue-100 transition">
-                  {item.text}
-                </p>
-
-              </div>
-            </div>
-          ))}
-
+                    <p
+                      className={`text-sm leading-relaxed flex-grow transition-colors duration-300 ${
+                        isActive ? "text-slate-600" : "text-slate-400"
+                      }`}
+                    >
+                      {item.desc}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
         </div>
-
-        {/* FINAL VISION BLOCK */}
-        <div className="mt-14 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white rounded-2xl p-8 text-center">
-
-          <h3 className="text-xl md:text-2xl font-semibold mb-3">
-            🌍 Vision for a Secure Digital Future
-          </h3>
-
-          <p className="text-sm md:text-base max-w-3xl mx-auto text-blue-100">
-            We are not just an organization—we are a movement towards building a safer, smarter, and more secure digital ecosystem for everyone.
-          </p>
-
-        </div>
-
       </div>
     </section>
   );
