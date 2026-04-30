@@ -20,44 +20,58 @@ const StatCard = ({ value, label, subtext, icon: Icon, delay }) => {
 
   useEffect(() => {
     if (!isVisible) return;
-    let start = 0;
+
     const duration = 2000;
-    const increment = targetValue / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= targetValue) {
-        setCount(targetValue);
-        clearInterval(timer);
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const startTime = performance.now();
+
+    const animate = (time) => {
+      const progress = Math.min((time - startTime) / duration, 1);
+      const eased = easeOut(progress);
+      const valueNow = Math.floor(eased * targetValue);
+
+      setCount(valueNow);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
       } else {
-        setCount(Math.floor(start));
+        setCount(targetValue);
       }
-    }, 16);
-    return () => clearInterval(timer);
+    };
+
+    requestAnimationFrame(animate);
   }, [isVisible, targetValue]);
 
   return (
-    <div 
+    <div
       ref={domRef}
-      className="group flex items-center gap-6 p-8 bg-white border border-slate-200 rounded-[24px] shadow-sm transition-all duration-500 hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 reveal-item relative overflow-hidden"
+      className="group relative flex items-center gap-6 p-8 rounded-[28px] 
+      bg-white/70 backdrop-blur-xl border border-slate-200/70 
+      shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+      transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+      hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:border-primary/40 overflow-hidden"
       style={{ animationDelay: `${delay}ms` }}
     >
-      {/* Subtle Hover Background Pulse */}
-      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-700 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
 
-      {/* Icon Box - High Visibility Blue */}
-      <div className="relative z-10 flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-        <Icon size={32} strokeWidth={2} />
+      <div className="relative z-10 flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl 
+      bg-primary text-white 
+      shadow-lg shadow-primary/30
+      transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+      group-hover:scale-110 group-hover:rotate-6">
+        <Icon size={30} strokeWidth={2.2} />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 flex flex-col">
-        <h3 className="text-3xl md:text-4xl font-black text-[#0F172A] tabular-nums tracking-tight">
+        <h3 className="text-4xl md:text-5xl font-extrabold tracking-[-0.02em] text-[#0F172A] tabular-nums">
           {count}{suffix}
         </h3>
-        <p className="text-sm font-bold text-primary uppercase tracking-widest">
+
+        <p className="text-xs font-extrabold text-primary uppercase tracking-[0.2em] mt-1">
           {label}
         </p>
-        <p className="text-xs text-slate-500 mt-1 font-medium italic">
+
+        <p className="text-xs text-slate-500 mt-2 font-medium leading-relaxed">
           {subtext}
         </p>
       </div>
@@ -67,59 +81,55 @@ const StatCard = ({ value, label, subtext, icon: Icon, delay }) => {
 
 export default function Stats() {
   const stats = [
-    { 
-        value: "500+", 
-        label: "Cyber Defenses", 
-        subtext: "Enterprise-grade security deployments",
-        icon: ShieldCheck 
-    },
-    { 
-        value: "120+", 
-        label: "SaaS Products", 
-        subtext: "Scalable software solutions built",
-        icon: Cpu 
-    },
-    { 
-        value: "25M+", 
-        label: "Secure Transactions", 
-        subtext: "Handled through our encrypted APIs",
-        icon: Zap 
-    },
-    { 
-        value: "99.9%", 
-        label: "Uptime Reliability", 
-        subtext: "Guaranteed product availability",
-        icon: Globe 
-    },
+    { value: "500+", label: "Cyber Defenses", subtext: "Enterprise-grade security deployments", icon: ShieldCheck },
+    { value: "120+", label: "SaaS Products", subtext: "Scalable software solutions built", icon: Cpu },
+    { value: "25M+", label: "Secure Transactions", subtext: "Handled through our encrypted APIs", icon: Zap },
+    { value: "99.9%", label: "Uptime Reliability", subtext: "Guaranteed product availability", icon: Globe },
   ];
 
   return (
-    <section className="py-24 px-6 bg-[#F8FAFC]">
+    <section className="py-28 px-6 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto">
-        {/* Section Badge */}
-        <div className="flex justify-center mb-6">
-          <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-50 border border-blue-100 text-primary text-xs font-black uppercase tracking-widest">
+
+        {/* Badge */}
+        <div className="flex justify-center mb-8">
+          <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full 
+          bg-blue-50 border border-blue-100 
+          text-primary text-[11px] font-extrabold uppercase tracking-[0.25em]">
             🛡️ Network Intelligence
           </span>
         </div>
 
-        {/* Section Heading */}
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-black text-[#0F172A] mb-6 tracking-tight">
-            Our Digital Footprint
+        {/* ✅ Clean Bold Heading */}
+        <div className="text-center mb-24">
+          <h2 className="text-4xl md:text-5xl font-bold font-[Inter] leading-tight mb-6 text-[#0F172A] tracking-[-0.01em]">
+            Our{" "}
+            <span className="text-[#93C5FD]">
+              Digital
+            </span>{" "}
+            Footprint
           </h2>
+
           <p className="text-slate-500 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
-            Leading the charge in <span className="text-primary font-bold">Cyber Defense</span> and <span className="text-primary font-bold">Product Innovation</span>. 
+            Leading the charge in{" "}
+            <span className="text-primary font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+              Cyber Defense
+            </span>{" "}
+            and{" "}
+            <span className="text-primary font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+              Product Innovation
+            </span>. 
             Empowering modern businesses with secure, scalable technology.
           </p>
         </div>
 
-        {/* 2x2 Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {stats.map((stat, i) => (
             <StatCard key={i} {...stat} delay={i * 150} />
           ))}
         </div>
+
       </div>
     </section>
   );

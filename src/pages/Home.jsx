@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 
 /* ================= ABOVE THE FOLD ================= */
 import Hero from "../sections/Hero";
+import TrustedBy from "../sections/TrustedBy";
 import EventBanner from "../sections/EventBanner";
 
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
@@ -30,6 +31,7 @@ export default function Home() {
 
       {/* ================= ABOVE FOLD ================= */}
       <Hero />
+      <TrustedBy />
       <EventBanner />
 
       {/* ================= WHO WE ARE ================= */}
