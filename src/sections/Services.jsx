@@ -43,7 +43,7 @@ export default function Services() {
             whileInView={{ opacity: 1 }}
             className="text-blue-600 font-bold tracking-widest text-xs uppercase bg-blue-50 px-3 py-1 rounded-full"
           >
-            Service
+            Service🧩
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 10 }}

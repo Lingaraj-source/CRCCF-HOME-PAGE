@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaShieldAlt,
@@ -10,6 +10,7 @@ import {
 
 export default function WhatWeDo() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false); // New state to handle hover pause
 
   const items = [
     {
@@ -50,159 +51,115 @@ export default function WhatWeDo() {
     },
   ];
 
-  return (
-    <section className="py-24 bg-[#F8FAFC] font-sans relative overflow-hidden">
-      {/* Decorative ambient background */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-blue-50 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-70 pointer-events-none" />
+  // Auto-play logic with HIGH SPEED (3 seconds)
+  useEffect(() => {
+    if (isPaused) return; // Stop timer if user is hovering
 
-      <div className="max-w-[1280px] mx-auto px-6 md:px-10 relative z-10">
-        {/* ================= HEADER ================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto mb-16"
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 text-blue-600 text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % items.length);
+    }, 3000); // 3000ms = 3 seconds (Change this lower for even faster)
+
+    return () => clearInterval(interval);
+  }, [items.length, isPaused]);
+
+  return (
+    <section className="h-screen min-h-[700px] flex items-center bg-[#F8FAFC] font-sans relative overflow-hidden py-12">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-50 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-70 pointer-events-none" />
+
+      <div className="max-w-[1280px] mx-auto px-6 md:px-10 relative z-10 w-full">
+        {/* HEADER */}
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-blue-600 text-[10px] font-bold tracking-widest uppercase mb-3">
             ⚙️ What We Do
           </span>
-
-          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-2">
             Our Core Work{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
               Domains
             </span>
           </h2>
+        </div>
 
-          <p className="text-slate-500 text-base leading-relaxed">
-            We work across multiple domains including cybersecurity, digital
-            investigation, software development, and professional training.
-          </p>
-        </motion.div>
-
-        {/* ================= ALIGNED GRID LAYOUT ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-          {/* ================= LEFT SIDE: 4 STACKED CARDS ================= */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          {/* LEFT CARDS */}
+          <div className="lg:col-span-5 flex flex-col gap-3">
             {items.map((item, i) => {
               const isActive = activeIndex === i;
               return (
-                <motion.button
+                <button
                   key={i}
+                  onMouseEnter={() => {
+                    setActiveIndex(i);
+                    setIsPaused(true);
+                  }}
+                  onMouseLeave={() => setIsPaused(false)}
                   onClick={() => setActiveIndex(i)}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                  viewport={{ once: true }}
-                  className={`group relative w-full text-left flex items-center p-5 rounded-2xl transition-all duration-300 overflow-hidden outline-none border ${
+                  className={`group relative w-full text-left flex items-center p-4 rounded-xl transition-all duration-300 border ${
                     isActive
-                      ? "bg-white border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.08)] scale-[1.02]"
-                      : "bg-slate-50/50 border-slate-200 hover:bg-white hover:border-slate-300 hover:shadow-md"
+                      ? "bg-white border-transparent shadow-lg scale-[1.02]"
+                      : "bg-slate-50/50 border-slate-200"
                   }`}
                 >
-                  {/* Animated Gradient Border for Active State */}
                   {isActive && (
                     <motion.div
-                      layoutId="activeTabBorder"
-                      className={`absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b ${item.gradient}`}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30,
-                      }}
+                      layoutId="activeBorder"
+                      className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${item.gradient}`}
                     />
                   )}
 
-                  {/* Icon */}
                   <div
-                    className={`mr-5 text-2xl p-3 rounded-xl transition-all duration-500 ${
-                      isActive
-                        ? `${item.textColor} ${item.bgGlow} scale-110 shadow-inner`
-                        : "text-slate-400 bg-slate-100 group-hover:text-blue-500 group-hover:scale-110"
-                    }`}
+                    className={`mr-4 text-xl p-2.5 rounded-lg transition-all ${isActive ? `${item.textColor} ${item.bgGlow} scale-110` : "text-slate-400 bg-slate-100"}`}
                   >
                     {item.icon}
                   </div>
 
-                  {/* Text */}
                   <div>
                     <h4
-                      className={`font-bold text-lg transition-colors duration-300 ${isActive ? "text-slate-900" : "text-slate-600 group-hover:text-slate-900"}`}
+                      className={`font-bold text-base ${isActive ? "text-slate-900" : "text-slate-600"}`}
                     >
                       {item.title}
                     </h4>
-                    <p
-                      className={`text-sm transition-colors duration-300 ${isActive ? "text-slate-500" : "text-slate-400"}`}
-                    >
-                      {item.subtitle}
-                    </p>
+                    <p className="text-xs text-slate-400">{item.subtitle}</p>
                   </div>
-                </motion.button>
+                </button>
               );
             })}
           </div>
 
-          {/* ================= RIGHT SIDE: LARGE DISPLAY CARD ================= */}
-          {/* h-full ensures it stretches to perfectly match the height of the 4 left cards */}
-          <div className="lg:col-span-7 h-full min-h-[450px]">
-            <div className="relative w-full h-full bg-white rounded-3xl border border-slate-100 shadow-[0_20px_60px_rgb(0,0,0,0.05)] p-8 md:p-12 overflow-hidden flex flex-col justify-center">
-              {/* Dynamic Animated Background Glow */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`glow-${activeIndex}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 0.15, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.2 }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  className={`absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-br ${items[activeIndex].gradient} blur-[80px] pointer-events-none translate-x-1/3 -translate-y-1/3`}
-                />
-              </AnimatePresence>
-
-              {/* Changing Content */}
+          {/* RIGHT DISPLAY */}
+          <div
+            className="lg:col-span-7 h-[420px]"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <div className="relative w-full h-full bg-white rounded-3xl border border-slate-100 shadow-xl p-8 md:p-10 overflow-hidden flex flex-col justify-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 250,
-                    damping: 25,
-                    duration: 0.4,
-                  }}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -30 }}
+                  transition={{ duration: 0.3 }} // Faster internal transition
                   className="relative z-10"
                 >
-                  {/* Floating Icon Animation */}
-                  <motion.div
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 4,
-                      ease: "easeInOut",
-                    }}
-                    className={`w-20 h-20 mb-8 rounded-2xl flex items-center justify-center text-4xl text-white shadow-xl bg-gradient-to-br ${items[activeIndex].gradient}`}
+                  <div
+                    className={`w-16 h-16 mb-6 rounded-2xl flex items-center justify-center text-3xl text-white bg-gradient-to-br ${items[activeIndex].gradient}`}
                   >
                     {items[activeIndex].icon}
-                  </motion.div>
+                  </div>
 
-                  <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                  <h3 className="text-3xl font-extrabold text-slate-900 mb-4">
                     {items[activeIndex].title}
                   </h3>
-
-                  <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-xl">
+                  <p className="text-base text-slate-500 leading-relaxed mb-8">
                     {items[activeIndex].desc}
                   </p>
 
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-white font-semibold shadow-md bg-gradient-to-r ${items[activeIndex].gradient} hover:shadow-lg transition-shadow`}
+                  <button
+                    className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-semibold bg-gradient-to-r ${items[activeIndex].gradient}`}
                   >
-                    Explore Domain
-                    <FaArrowRight className="text-sm" />
-                  </motion.button>
+                    Explore Domain <FaArrowRight className="text-xs" />
+                  </button>
                 </motion.div>
               </AnimatePresence>
             </div>

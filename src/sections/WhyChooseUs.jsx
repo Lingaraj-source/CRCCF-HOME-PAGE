@@ -17,6 +17,7 @@ import {
 export default function WhyChooseUs() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [cardWidth, setCardWidth] = useState(340); // Added state for dynamic width
 
   const features = [
     {
@@ -68,6 +69,18 @@ export default function WhyChooseUs() {
 
   const totalCards = features.length;
 
+  // Track screen size to adjust card width for mobile responsiveness
+  useEffect(() => {
+    const handleResize = () => {
+      // 640px is the Tailwind 'sm' breakpoint
+      setCardWidth(window.innerWidth < 640 ? 300 : 340);
+    };
+
+    handleResize(); // Set on initial load
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Premium Auto-Play Logic
   useEffect(() => {
     if (isHovered) return;
@@ -88,8 +101,8 @@ export default function WhyChooseUs() {
   };
 
   // Calculates how far to move the track based on the active index
-  // Assumes a card width of roughly 340px + 24px gap = 364px shift
-  const trackOffset = -(activeIndex * 364);
+  // Card width + 24px (gap-6) = dynamic shift for mobile/desktop
+  const trackOffset = -(activeIndex * (cardWidth + 24));
 
   return (
     <section className="py-20 bg-[#F8FAFC] font-sans relative overflow-hidden">
@@ -161,9 +174,15 @@ export default function WhyChooseUs() {
           </button>
 
           {/* Framer Motion Animated Track */}
-          <div className="overflow-hidden w-full relative h-[420px] flex items-center">
+          <div className="overflow-hidden w-full relative h-[420px] flex items-center touch-pan-y">
             {/* The Track that slides left/right */}
             <motion.div
+              drag="x" // Added swipe support for mobile
+              dragConstraints={{ left: trackOffset, right: trackOffset }}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -50) slideRight();
+                if (info.offset.x > 50) slideLeft();
+              }}
               animate={{ x: trackOffset }}
               transition={{
                 type: "spring",
@@ -171,8 +190,9 @@ export default function WhyChooseUs() {
                 damping: 30,
                 mass: 1,
               }}
-              className="flex gap-6 absolute left-1/2 lg:left-[calc(50%-170px)]"
-              // Centers the active card in the viewport
+              // Removed hardcoded left Tailwind classes, replaced with dynamic style for centering
+              className="flex gap-6 absolute"
+              style={{ left: `calc(50% - ${cardWidth / 2}px)` }}
             >
               {features.map((item, index) => {
                 const isActive = index === activeIndex;

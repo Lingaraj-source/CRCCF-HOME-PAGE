@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaChartLine,
   FaUserGraduate,
   FaBrain,
   FaCode,
+  FaChevronDown,
+  FaBullhorn,
 } from "react-icons/fa";
 
 export default function Activities() {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   const items = [
     {
       icon: <FaChartLine />,
@@ -23,118 +28,128 @@ export default function Activities() {
       title: "Research Initiatives",
       desc: "Supporting cutting-edge research in cybersecurity and digital innovation domains.",
     },
+    {
+      icon: <FaCode />,
+      title: "Technology-Driven Projects",
+      desc: "Engaging in innovative technology projects that address real-world challenges and promote digital transformation across various sectors.",
+    },
   ];
 
   return (
-    <section className="py-16 bg-[#F1F5F9]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20">
-
-        {/* HEADER */}
+    <section className="py-20 lg:py-32 bg-white font-sans overflow-hidden">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12">
+        {/* --- HEADER --- */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-16 md:mb-24"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#DBEAFE] text-[#2563EB] text-sm">
-            📊 Activities
-          </span>
+          {/* Pill Badge */}
+          <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[#EFF6FF] border border-[#DBEAFE] mb-8 shadow-sm">
+            <FaBullhorn className="text-[#3B82F6] text-xs" />
+            <span className="text-[#2563EB] font-bold tracking-[0.1em] text-[11px] uppercase">
+              Activities
+            </span>
+          </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A] mt-4">
-            Our Ongoing Initiatives
+          {/* Main Heading with more visible blue */}
+          <h2 className="text-4xl md:text-6xl font-bold text-[#0F172A] leading-tight mb-8">
+            Our <span className="text-[#3B82F6]">Activities </span>
           </h2>
 
-          <p className="text-[#64748B] mt-3 text-sm md:text-base">
-            Promoting digital safety, innovation, and knowledge-sharing across communities
+          {/* Description - Size refined for a "Neat" look */}
+          <p className="text-[#64748B] text-base md:text-lg leading-relaxed max-w-4xl mx-auto font-medium">
+            Our Ongoing Initiatives <br />
+            Promoting digital safety, innovation, and knowledge-sharing across
+            communities
           </p>
         </motion.div>
 
-        {/* TOP CARDS */}
-        <div className="grid md:grid-cols-3 gap-6 mb-6">
+        {/* --- THE RESPONSIVE CONNECTED PATH --- */}
+        <div className="relative flex flex-col md:flex-row gap-6 md:gap-4 lg:gap-6 items-stretch">
+          {/* BACKGROUND LINES */}
+          <div className="hidden md:block absolute top-[28px] left-0 w-full h-[2px] bg-slate-100 z-0"></div>
+          <div className="md:hidden absolute top-0 left-[27px] w-[2px] h-full bg-slate-100 z-0"></div>
 
-          {items.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="group relative bg-white border rounded-2xl p-6
-              hover:-translate-y-1 hover:shadow-xl
-              transition-all duration-300 overflow-hidden"
-            >
+          {/* ANIMATED GLOWING TRACES */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="hidden md:block absolute top-[28px] left-0 w-full h-[2px] bg-gradient-to-r from-[#3B82F6] via-cyan-400 to-transparent origin-left z-0"
+          ></motion.div>
+          <motion.div
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="md:hidden absolute top-0 left-[27px] w-[2px] h-full bg-gradient-to-b from-[#3B82F6] via-cyan-400 to-transparent origin-top z-0"
+          ></motion.div>
 
-              {/* glow */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#DBEAFE] rounded-full blur-3xl opacity-20"></div>
+          {/* ACTIVITY NODES */}
+          {items.map((item, i) => {
+            const isExpanded = expandedIndex === i;
 
-              {/* overlay FIX */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100
-              bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-              transition duration-300 rounded-2xl -z-10"></div>
-
-              <div className="relative z-10">
-
-                <div className="w-12 h-12 flex items-center justify-center rounded-lg
-                bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-                text-white text-lg shadow-md mb-4
-                group-hover:scale-110 transition">
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.3 + i * 0.25,
+                  ease: "easeOut",
+                }}
+                viewport={{ once: true }}
+                onClick={() => setExpandedIndex(isExpanded ? null : i)}
+                className="relative z-10 flex-1 flex flex-row md:flex-col gap-6 md:gap-0 cursor-pointer group"
+              >
+                {/* Node Icon */}
+                <div className="w-14 h-14 shrink-0 bg-white border-[4px] border-[#F8FAFC] rounded-full flex items-center justify-center shadow-sm text-[#3B82F6] text-xl md:mb-6 md:mx-auto relative z-20 transition-all duration-300 group-hover:scale-110 group-hover:border-blue-50">
+                  <div className="absolute inset-0 rounded-full bg-blue-400/10 scale-0 group-hover:scale-150 group-hover:opacity-0 transition-all duration-700"></div>
                   {item.icon}
                 </div>
 
-                <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-white transition">
-                  {item.title}
-                </h3>
+                {/* Card */}
+                <div
+                  className={`w-full border rounded-2xl p-5 transition-all duration-500 flex flex-col min-h-[100px] md:min-h-[120px] group-hover:-translate-y-1
+                  ${
+                    isExpanded
+                      ? "bg-white shadow-xl border-blue-200"
+                      : "bg-[#F8FAFC] border-slate-100 group-hover:bg-white group-hover:shadow-lg group-hover:border-blue-50"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2 h-full">
+                    <h3
+                      className={`text-sm md:text-base font-semibold leading-tight transition-all duration-500 
+                      ${isExpanded ? "text-[#2563EB]" : "text-slate-900 group-hover:text-[#2563EB]"}`}
+                    >
+                      {item.title}
+                    </h3>
+                    <FaChevronDown
+                      className={`text-slate-400 shrink-0 mt-1 text-xs transition-transform duration-500 
+                      ${isExpanded ? "rotate-180 text-[#2563EB]" : "group-hover:text-[#3B82F6]"}`}
+                    />
+                  </div>
 
-                <p className="text-sm text-[#475569] mt-2 leading-relaxed group-hover:text-blue-100 transition">
-                  {item.desc}
-                </p>
-
-              </div>
-
-            </motion.div>
-          ))}
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-500 ease-in-out 
+                    ${isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-xs md:text-sm text-slate-500 leading-relaxed mt-4 border-t border-slate-100 pt-3">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
-
-        {/* BOTTOM CARD */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="group relative bg-white border rounded-2xl p-6 md:p-7
-          hover:-translate-y-1 hover:shadow-xl transition-all duration-300 overflow-hidden"
-        >
-
-          <div className="absolute top-0 right-0 w-40 h-40 bg-[#DBEAFE] rounded-full blur-3xl opacity-20"></div>
-
-          {/* overlay FIX */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100
-          bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-          transition duration-300 rounded-2xl -z-10"></div>
-
-          <div className="relative z-10 flex items-start gap-4">
-
-            <div className="w-12 h-12 flex items-center justify-center rounded-lg
-            bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]
-            text-white text-lg shadow-md group-hover:scale-110 transition">
-              <FaCode />
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-white transition">
-                Technology-Driven Projects
-              </h3>
-
-              <p className="text-sm text-[#475569] mt-2 leading-relaxed group-hover:text-blue-100 transition">
-                Engaging in innovative technology projects that address real-world challenges and promote digital transformation across various sectors.
-              </p>
-            </div>
-
-          </div>
-
-        </motion.div>
-
       </div>
     </section>
   );
