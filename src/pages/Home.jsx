@@ -9,6 +9,7 @@ import EventBanner from "../sections/EventBanner";
 
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
 import WhoWeAre from "../sections/WhoWeAre";
+import TechStack from "../sections/TechStack";
 
 /* ================= LAZY SECTIONS ================= */
 const Introduction = lazy(() => import("../sections/Introduction"));
@@ -46,6 +47,7 @@ export default function Home() {
         <Services />
         <Activities />
         <Innovation />
+        <TechStack/>
         <Projects />
         <Stats />
         <Testimonials />
