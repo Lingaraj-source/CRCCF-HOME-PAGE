@@ -6,6 +6,7 @@ import ReachUs from "./pages/ReachUs";
 import Gallery from "./pages/Gallery/Gallery";
 import CategoryPage from "./pages/Gallery/CategoryPage";
 import AboutRoutes from "./pages/AboutUs/AboutRoutes";
+import ServiceRouter from "./pages/Service/ServiceRouter";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Home"));
@@ -26,23 +27,19 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <Routes>
-
           {/* 🔥 LAYOUT WRAPPER */}
           <Route element={<MainLayout />}>
-
             <Route path="/" element={<Home />} />
-            <Route path="/about/*" element={<AboutRoutes/>} />
+            <Route path="/about/*" element={<AboutRoutes />} />
+            <Route path="/services/*" element={<ServiceRouter />} />
             <Route path="/internship" element={<Internship />} />
             <Route path="/reachus" element={<ReachUs />} />
             <Route path="/gallery" element={<Gallery />} />
-            <Route path="/category/:id" element={<CategoryPage/>} />
-
-
+            <Route path="/category/:id" element={<CategoryPage />} />
           </Route>
 
           {/* ❗ OUTSIDE LAYOUT */}
           <Route path="*" element={<NotFound />} />
-
         </Routes>
       </Suspense>
     </BrowserRouter>
