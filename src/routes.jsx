@@ -7,6 +7,7 @@ import Gallery from "./pages/Gallery/Gallery";
 import CategoryPage from "./pages/Gallery/CategoryPage";
 import AboutRoutes from "./pages/AboutUs/AboutRoutes";
 import ServiceRouter from "./pages/Service/ServiceRouter";
+import ContactRoutes from "./pages/ContactUs/ContactRoutes";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Home"));
@@ -35,6 +36,7 @@ export default function AppRoutes() {
             <Route path="/internship" element={<Internship />} />
             <Route path="/reachus" element={<ReachUs />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact/*" element={<ContactRoutes />} />{" "}
             <Route path="/category/:id" element={<CategoryPage />} />
           </Route>
 
