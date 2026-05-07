@@ -8,8 +8,6 @@ export default function Trustedby() {
     "https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg",
     "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
     "https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg",
-    "https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2016_Stripe.svg",
-    "https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg",
     "https://upload.wikimedia.org/wikipedia/commons/8/8d/Adobe_Corporate_Logo.png",
   ];
 

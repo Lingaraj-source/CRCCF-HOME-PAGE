@@ -116,11 +116,10 @@ export default function Activities() {
                 {/* Card */}
                 <div
                   className={`w-full border rounded-2xl p-5 transition-all duration-500 flex flex-col min-h-[100px] md:min-h-[120px] group-hover:-translate-y-1
-                  ${
-                    isExpanded
+                  ${isExpanded
                       ? "bg-white shadow-xl border-blue-200"
                       : "bg-[#F8FAFC] border-slate-100 group-hover:bg-white group-hover:shadow-lg group-hover:border-blue-50"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-2 h-full">
                     <h3

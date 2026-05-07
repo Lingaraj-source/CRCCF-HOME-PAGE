@@ -87,13 +87,12 @@ export default function PurposeMission() {
               onMouseLeave={() => setFlipped(null)}
             >
               <div
-                className={`relative w-full h-full rounded-3xl transition-transform duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)] transform-style-preserve-3d shadow-[0_10px_40px_-10px_rgba(0,0,0,0.06)] group-hover:shadow-[0_20px_50px_-10px_rgba(37,99,235,0.15)] ${
-                  isFlipped ? "rotate-y-180" : ""
-                }`}
+                className={`relative w-full h-full rounded-3xl transition-transform duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)] transform-style-preserve-3d shadow-[0_10px_40px_-10px_rgba(0,0,0,0.06)] group-hover:shadow-[0_20px_50px_-10px_rgba(37,99,235,0.15)] ${isFlipped ? "rotate-y-180" : ""
+                  }`}
               >
                 {/* FRONT */}
                 <div className="absolute inset-0 backface-hidden rounded-3xl border border-white bg-white/90 backdrop-blur-xl flex flex-col items-center justify-center text-center p-8 transition-colors duration-500">
-                  
+
                   {/* Floating Icon Container */}
                   <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl mb-6 bg-gradient-to-br from-[#EFF6FF] to-white border border-[#E2E8F0] shadow-[0_8px_20px_rgb(37,99,235,0.08)] transition-transform duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110 group-hover:shadow-[0_12px_25px_rgb(37,99,235,0.15)]">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-60 rounded-2xl"></div>
@@ -114,7 +113,7 @@ export default function PurposeMission() {
 
                 {/* BACK */}
                 <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-8 flex flex-col justify-center text-center bg-gradient-to-br from-[#2563EB] via-[#1D4ED8] to-[#1E40AF] shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/10 overflow-hidden">
-                  
+
                   {/* Subtle Top Glare */}
                   <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 to-transparent opacity-50 pointer-events-none rounded-t-3xl"></div>
 
