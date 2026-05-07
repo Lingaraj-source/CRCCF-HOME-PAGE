@@ -5,9 +5,8 @@ import { Link } from "react-router-dom";
 import Announcements from "../../sections/ContactUs/Announcements";
 import { createPortal } from "react-dom";
 
-// ✨ 1. Import the images you want to pass to the Announcement here!
-
-// import anotherImage from "../assets/contact_image/anotherImage.png";
+// Import the images you want to pass to the Announcement here!
+import suraj from "../../assets/contactUs/suraj.png";
 
 // Custom hook for the Typewriter Effect
 const useTypewriter = (words) => {
@@ -85,20 +84,15 @@ const DirectorySection = ({ title, Icon, data = [] }) => {
     return matchesSearch;
   });
 
-  // Conditional Scroll Lock
+  // ✨ FIX: Removed the scroll lock!
+  // It now only ensures the page scrolls to the top when opening a profile,
+  // but it leaves the body scrolling completely active.
   useEffect(() => {
     if (selectedPerson) {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      if (window.innerWidth >= 1024) {
-        document.body.style.overflow = "hidden";
-      }
-    } else {
-      document.body.style.overflow = "unset";
     }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    // Ensures scroll is never accidentally locked if component unmounts
+    document.body.style.overflow = "unset";
   }, [selectedPerson]);
 
   if (selectedPerson) {
@@ -272,15 +266,14 @@ const DirectorySection = ({ title, Icon, data = [] }) => {
         </div>
       )}
 
-      {/* ✨ 2. THE UPDATED ANNOUNCEMENT COMPONENT CALL ✨ */}
       {isAnnouncementOpen &&
         createPortal(
           <Announcements
             onClose={() => setIsAnnouncementOpen(false)}
-            title="Add Your Title Here"
-            subtitle="Add Your Subtitle Here"
+            title="Employee of the Month!"
+            subtitle="Congratulations Suraj"
             marqueeText="🌟 OUTSTANDING PERFORMANCE 🌟 OUTSTANDING PERFORMANCE"
-            adminImages={[]} // Passed as an array
+            adminImages={[suraj]}
           />,
           document.body,
         )}
