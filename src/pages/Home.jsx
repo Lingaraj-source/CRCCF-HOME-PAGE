@@ -6,14 +6,13 @@ import { Suspense, lazy } from "react";
 import Hero from "../sections/Hero";
 import TrustedBy from "../sections/TrustedBy";
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
-import WhoWeAre from "../sections/WhoWeAre";
-import TechStack from "../sections/TechStack";
 
 /* ================= LAZY SECTIONS ================= */
+const WhoWeAre = lazy(() => import("../sections/WhoWeAre"));
 const Introduction = lazy(() => import("../sections/Introduction"));
 const PurposeMission = lazy(() => import("../sections/PurposeMission"));
 const WhatWeDo = lazy(() => import("../sections/WhatWeDo"));
-const services = lazy(() => import("../sections/Services"));
+const Services = lazy(() => import("../sections/Services"));
 const Activities = lazy(() => import("../sections/Activities"));
 const TechStack = lazy(() => import("../sections/TechStack"));
 const InternshipSection = lazy(() => import("../sections/InternshipSection"));
@@ -47,7 +46,7 @@ export default function Home() {
         <Activities />
         <TechStack/>
         <Projects />
-        <InternshipPrograms/>
+        <InternshipSection/>
         <WhyChooseUs />
         <Insights/>
         <Testimonials />
