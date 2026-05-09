@@ -1,299 +1,701 @@
-import { useState, useEffect, useRef } from "react";
-import {
-  LuSearch,
-  LuCalendarClock,
-  LuGlobe,
-  LuMenu,
-  LuImage,
-  LuX,
-} from "react-icons/lu";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-import logo from "../assets/logo.png";
-import ReachUs from "../pages/ReachUs";
+/* ─── Marquee text ─────────────────────────────────────────── */
+const NOTICE =
+  "Welcome to CR Cyber Crime Foundation — a leading IT, software, and cybersecurity organization in India. With 24/7 dedication, CRCCF delivers innovative software products, scalable web and mobile applications, and end-to-end IT solutions.       ";
+const TRACK = (NOTICE + NOTICE).repeat(2);
 
-export default function TopBar() {
-  const [showSearch, setShowSearch] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [time, setTime] = useState(new Date());
-  const [searchValue, setSearchValue] = useState("");
+/* ─── Gallery preview thumbnails ──────────────────────── */
+const GALLERY = [
+  {
+    src: "https://media.base44.com/images/public/69e89f547154ba3350c8414c/a86e66dfa_generated_b06e8f70.png",
+    alt: "Our Student",
+  },
+  {
+    src: "https://media.base44.com/images/public/69e89f547154ba3350c8414c/14024feb9_generated_be8043d0.png",
+    alt: "Media & Press",
+  },
+  {
+    src: "https://media.base44.com/images/public/69e89f547154ba3350c8414c/41d80063f_generated_ee62a935.png",
+    alt: "Events",
+  },
+  {
+    src: "https://media.base44.com/images/public/69e89f547154ba3350c8414c/cd99b2cbe_generated_fd487187.png",
+    alt: "Team Moments",
+  },
+  {
+    src: "https://media.base44.com/images/public/69e89f547154ba3350c8414c/9676c4c3d_generated_77243b6c.png",
+    alt: "Certificates",
+  },
+  {
+    src: "https://media.base44.com/images/public/69e89f547154ba3350c8414c/4b478b14f_generated_12c36e15.png",
+    alt: "Client Work",
+  },
+];
 
-  const searchRef = useRef();
-  const calendarRef = useRef();
+/* ─── SVG Analog Clock ──────────────────────────────────────── */
+function AnalogClock() {
+  const [now, setNow] = useState(new Date());
 
-  // LIVE TIME
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
   }, []);
 
-  // CLOSE ON OUTSIDE CLICK
+  const s = now.getSeconds();
+  const m = now.getMinutes();
+  const h = now.getHours() % 12;
+
+  const sDeg = s * 6;
+  const mDeg = m * 6 + s * 0.1;
+  const hDeg = h * 30 + m * 0.5;
+
+  const hand = (deg, len) => ({
+    x2: 30 + len * Math.sin((deg * Math.PI) / 180),
+    y2: 30 - len * Math.cos((deg * Math.PI) / 180),
+  });
+
+  const dateStr = now.toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+  const timeStr = now.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return (
+    <div className="clock-body flex items-center gap-[9px] px-[12px] whitespace-nowrap">
+      {/* SVG CLOCK FACE */}
+      <svg
+        viewBox="0 0 60 60"
+        width="36"
+        height="36"
+        className="clock-svg drop-shadow-[0_0_6px_rgba(26,86,219,.40)] transition-[filter] duration-[300ms] group-hover:drop-shadow-[0_0_10px_rgba(26,86,219,.70)]"
+      >
+        {/* Outer ring */}
+        <circle
+          cx="30"
+          cy="30"
+          r="29"
+          fill="#0a1628"
+          stroke="rgba(255,255,255,.22)"
+          strokeWidth="1.5"
+        />
+        {/* Inner glow */}
+        <circle
+          cx="30"
+          cy="30"
+          r="26"
+          fill="none"
+          stroke="rgba(26,86,219,.18)"
+          strokeWidth="1"
+        />
+        {/* Hour tick marks */}
+        {[...Array(12)].map((_, i) => {
+          const a = ((i * 30 - 90) * Math.PI) / 180;
+          const big = i % 3 === 0;
+          const r1 = big ? 22 : 24,
+            r2 = 27;
+          return (
+            <line
+              key={i}
+              x1={30 + r1 * Math.cos(a)}
+              y1={30 + r1 * Math.sin(a)}
+              x2={30 + r2 * Math.cos(a)}
+              y2={30 + r2 * Math.sin(a)}
+              stroke={big ? "rgba(255,255,255,.80)" : "rgba(255,255,255,.35)"}
+              strokeWidth={big ? 1.6 : 0.9}
+            />
+          );
+        })}
+        {/* Hour hand */}
+        <line
+          x1="30"
+          y1="30"
+          {...hand(hDeg, 14)}
+          stroke="#fff"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
+        {/* Minute hand */}
+        <line
+          x1="30"
+          y1="30"
+          {...hand(mDeg, 19)}
+          stroke="rgba(255,255,255,.90)"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+        {/* Second hand */}
+        <line
+          x1="30"
+          y1="30"
+          {...hand(sDeg, 22)}
+          stroke="#EF4444"
+          strokeWidth="1.1"
+          strokeLinecap="round"
+        />
+        {/* Centre dot */}
+        <circle cx="30" cy="30" r="2.2" fill="#1A56DB" />
+        <circle cx="30" cy="30" r="1" fill="#fff" />
+      </svg>
+
+      {/* DIGITAL DATE + TIME */}
+      <div className="clock-info flex flex-col gap-[1px] max-[900px]:hidden">
+        <span className="clock-time text-[12px] font-[700] text-[#fff] tracking-[.04em] leading-[1]">
+          {timeStr}
+        </span>
+        <span className="clock-date text-[10px] text-[rgba(255,255,255,.48)] font-[500] tracking-[.03em] leading-[1]">
+          {dateStr}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Gallery Popup ─────────────────────────────────────────── */
+function GalleryPopup({ navigate }) {
+  return (
+    <motion.div
+      className="gallery-popup absolute top-[calc(100%+6px)] right-0 w-[340px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-[#fff] shadow-[0_20px_60px_rgba(0,0,0,.22)] z-[9999] max-[480px]:w-[280px] max-[480px]:right-[-10px]"
+      onClick={() => navigate("/gallery")}
+      initial={{ opacity: 0, y: -6, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -6, scale: 0.96 }}
+      transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+      style={{ cursor: "pointer" }}
+    >
+      <div className="gallery-popup-head flex items-center justify-between px-[16px] pt-[12px] pb-[10px] border-b border-[#F3F4F6] text-[13px] font-[700] text-[#111827]">
+        <span>📸 Gallery Preview</span>
+        <span className="gallery-popup-count text-[11px] font-[600] text-[#9CA3AF] bg-[#F3F4F6] px-[9px] py-[2px] rounded-[999px]">
+          {GALLERY.length} photos
+        </span>
+      </div>
+      <div className="gallery-popup-grid grid grid-cols-3 gap-[6px] p-[10px] max-[480px]:grid-cols-2">
+        {GALLERY.map((img, i) => (
+          <motion.div
+            key={i}
+            className="gallery-thumb group relative aspect-[4/3] overflow-hidden rounded-[8px] cursor-pointer"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.04, duration: 0.22 }}
+            whileHover={{ scale: 1.06, zIndex: 2 }}
+          >
+            <img
+              src={img.src}
+              alt={img.alt}
+              loading="lazy"
+              className="w-full h-full object-cover block transition-transform duration-[350ms] group-hover:scale-[1.08]"
+            />
+            <div className="gallery-thumb-overlay absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,.65)_0%,transparent_50%)] opacity-0 transition-opacity duration-[250ms] flex items-end p-[6px_7px] group-hover:opacity-100">
+              <span className="text-[10px] text-[#fff] font-[600] leading-[1.2]">
+                {img.alt}
+              </span>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      <button
+        onClick={() => navigate("/gallery")}
+        className="gallery-popup-cta w-full flex items-center justify-center p-[10px] text-[12.5px] font-[700] text-[#1A56DB] no-underline transition-[background] duration-[150ms] tracking-[.03em] hover:bg-[#EFF6FF]"
+        style={{
+          width: "100%",
+          background: "none",
+          border: "none",
+          borderTop: "1px solid #F3F4F6",
+          cursor: "pointer",
+        }}
+      >
+        View Full Gallery →
+      </button>
+    </motion.div>
+  );
+}
+
+/* ─── Reach Us Popup ─────────────────────────────────────────── */
+function ReachUsPopup({ navigate }) {
+  const socialIcons = [
+    {
+      name: "Facebook",
+      color: "#1877F2",
+      link: "https://www.facebook.com/people/Crcyber-Crime/61576052739281/",
+    },
+    {
+      name: "LinkedIn",
+      color: "#0A66C2",
+      link: "https://www.linkedin.com/company/cr-cyber-crime/posts/?feedView=all",
+    },
+    {
+      name: "Instagram",
+      color: "#E4405F",
+      link: "https://www.instagram.com/crcybercrime/",
+    },
+    { name: "X", color: "#000000", link: "https://x.com/" },
+  ];
+
+  return (
+    <motion.div
+      className="gallery-popup absolute top-[calc(100%+6px)] right-0 w-[340px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-[#fff] shadow-[0_20px_60px_rgba(0,0,0,.22)] z-[9999] max-[480px]:w-[280px] max-[480px]:right-[-10px]"
+      onClick={() => navigate("/reachus")}
+      initial={{ opacity: 0, y: -6, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -6, scale: 0.96 }}
+      transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+      style={{ width: "300px", right: 0, cursor: "pointer" }}
+    >
+      <div className="gallery-popup-head flex items-center justify-between px-[16px] pt-[12px] pb-[10px] border-b border-[#F3F4F6] text-[13px] font-[700] text-[#111827]">
+        <span>🌍 Reach Our Support</span>
+      </div>
+
+      <div
+        style={{
+          padding: "14px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+        }}
+      >
+        {/* Quick Contact Info */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            background: "linear-gradient(135deg, #1A56DB, #1044B8)",
+            padding: "14px",
+            borderRadius: "12px",
+            color: "white",
+            boxShadow: "0 8px 16px rgba(26,86,219,0.15)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              fontSize: "13px",
+            }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span style={{ fontWeight: 600 }}>+91 97779 99529</span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              fontSize: "13px",
+            }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span style={{ fontWeight: 600 }}>hr@crcybercrime.org</span>
+          </div>
+        </div>
+
+        {/* Branches Summary */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "8px",
+          }}
+        >
+          {[
+            { city: "New York", phone: "+1 (555) 123-4567" },
+            { city: "London", phone: "+44 20 7123 4567" },
+            { city: "Singapore", phone: "+65 6789 0123" },
+          ].map((branch, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: "10.5px",
+                background: "#F8FAFC",
+                padding: "10px",
+                borderRadius: "10px",
+                border: "1px solid #F1F5F9",
+              }}
+            >
+              <strong style={{ color: "#0F172A", fontSize: "11.5px" }}>
+                {branch.city}
+              </strong>
+              <span
+                style={{ color: "#2563EB", marginTop: "3px", fontWeight: 600 }}
+              >
+                {branch.phone}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Social Links */}
+        <div style={{ padding: "4px 0" }}>
+          <p
+            style={{
+              fontSize: "11px",
+              fontWeight: 800,
+              color: "#94A3B8",
+              marginBottom: "10px",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+            }}
+          >
+            Official Community
+          </p>
+          <div style={{ display: "flex", gap: "12px" }}>
+            {socialIcons.map((s, i) => (
+              <a
+                key={i}
+                href={s.link}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  background: "#F8FAFC",
+                  border: "1px solid #F1F5F9",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: s.color,
+                  transition: "all 0.2s",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
+                }}
+              >
+                {s.name === "LinkedIn" && (
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.989v-10.131c0-7.88-8.922-7.593-11.02-3.711v-2.158z" />
+                  </svg>
+                )}
+                {s.name === "Instagram" && (
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-1.42.065-2.391.301-3.238 1.295-.847.994-1.083 1.965-1.148 3.385-.058 1.28-.072 1.688-.072 4.947s.014 3.667.072 4.947c.065 1.42.301 2.391 1.295 3.238.994.847 1.965 1.083 3.385 1.148 1.28.058 1.688.072 4.947.072s3.667-.014 4.947-.072c1.42-.065 2.391-.301 3.238-1.295.847-.994 1.083-1.965 1.148-3.385.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.065-1.42-.301-2.391-1.295-3.238-.994-.847-1.965-1.083-3.385-1.148-1.28-.058-1.688-.072-4.947-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.44-.645 1.44-1.44s-.645-1.44-1.44-1.44z" />
+                  </svg>
+                )}
+                {s.name === "X" && (
+                  <svg
+                    width="14"
+                    height="14"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.134l4.713 6.176 5.397-6.176zM17.082 19.77h1.833L7.084 4.126H5.117L17.082 19.77z" />
+                  </svg>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={() => navigate("/reachus")}
+          style={{
+            width: "100%",
+            background: "#00D1C1",
+            color: "white",
+            padding: "12px",
+            borderRadius: "12px",
+            border: "none",
+            cursor: "pointer",
+            fontWeight: 700,
+            fontSize: "13px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            marginTop: "2px",
+            boxShadow: "0 6px 20px rgba(0,209,193,0.25)",
+            transition: "all 0.2s",
+          }}
+        >
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Drop Your Message
+        </button>
+      </div>
+      <button
+        onClick={() => navigate("/reachus")}
+        className="gallery-popup-cta w-full flex items-center justify-center p-[10px] text-[12.5px] font-[700] text-[#1A56DB] no-underline transition-[background] duration-[150ms] tracking-[.03em] hover:bg-[#EFF6FF]"
+        style={{
+          width: "100%",
+          background: "none",
+          border: "none",
+          borderTop: "1px solid #F1F5F9",
+          cursor: "pointer",
+        }}
+      >
+        Connect With Official Channels →
+      </button>
+    </motion.div>
+  );
+}
+
+/* ─── TOP BAR ───────────────────────────────────────────────── */
+export default function TopBar() {
+  /* Clock: visible on load → hides after 2 s → shows on hover */
+  const [clockAutoVisible, setClockAutoVisible] = useState(true);
+  const [clockHovered, setClockHovered] = useState(false);
+  const [galleryHovered, setGalleryHovered] = useState(false);
+  const [reachHovered, setReachHovered] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const t = setTimeout(() => setClockAutoVisible(false), 2000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const clockVisible = clockAutoVisible || clockHovered;
+
+  // Close popups on click outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setShowSearch(false);
-      }
-      if (calendarRef.current && !calendarRef.current.contains(e.target)) {
-        setShowCalendar(false);
+      if (
+        !e.target.closest(".tb-gallery-zone") &&
+        !e.target.closest(".tb-reach-zone")
+      ) {
+        setGalleryHovered(false);
+        setReachHovered(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // PREVENT OVERLAP
-  useEffect(() => {
-    if (showSearch) setShowCalendar(false);
-    if (showCalendar) setShowSearch(false);
-  }, [showSearch, showCalendar]);
+  const handleGalleryClick = () => {
+    if (window.innerWidth <= 1024) {
+      if (!galleryHovered) {
+        setGalleryHovered(true);
+        setReachHovered(false);
+      } else {
+        navigate("/gallery");
+      }
+    } else {
+      navigate("/gallery");
+    }
+  };
 
-  const formattedDate = time.toLocaleDateString("en-IN", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
-
-  const formattedTime = time.toLocaleTimeString("en-IN");
+  const handleReachClick = () => {
+    if (window.innerWidth <= 1024) {
+      if (!reachHovered) {
+        setReachHovered(true);
+        setGalleryHovered(false);
+      } else {
+        navigate("/reachus");
+      }
+    } else {
+      navigate("/reachus");
+    }
+  };
 
   return (
-    <div className="sticky top-0 bg-[#0f172a] text-white text-sm z-[60] w-full">
+    <div className="topbar relative z-[200] bg-[#0C1A3A] flex items-center h-[42px] border-b border-[rgba(255,255,255,.07)] overflow-visible">
+      {/* ── LEFT: FIXED WELCOME LABEL ── */}
+      <div className="tb-welcome flex shrink-0 items-center gap-[7px] px-[16px] whitespace-nowrap select-none text-[12.5px] font-[700] text-[rgba(255,255,255,.90)] tracking-[.04em] uppercase max-[700px]:px-[8px] max-[700px]:text-[10px] max-[480px]:px-[6px] max-[480px]:text-[9px] max-[480px]:gap-[4px]">
+        <motion.span
+          className="tb-welcome-dot w-[7px] h-[7px] rounded-[50%] bg-[#22C55E] shadow-[0_0_0_0_rgba(34,197,94,.55)] max-[480px]:w-[5px] max-[480px]:h-[5px]"
+          animate={{
+            boxShadow: [
+              "0 0 0 0 rgba(34,197,94,.55)",
+              "0 0 0 6px rgba(34,197,94,0.00)",
+              "0 0 0 0 rgba(34,197,94,0.00)",
+            ],
+          }}
+          transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+        />
+        Welcome To CRCCF
+      </div>
+      <div className="tb-welcome-sep w-[1px] h-[22px] bg-[rgba(255,255,255,.12)] shrink-0" />
 
-      {/* Top glow line */}
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-40"></div>
+      {/* ── SCROLLING ANNOUNCEMENT ── */}
+      <div className="tb-marquee flex-1 overflow-hidden min-w-0">
+        <motion.div
+          className="tb-track inline-block whitespace-nowrap text-[12.5px] text-[rgba(255,255,255,.78)] font-[400] pl-[24px] tracking-[.01em] max-[700px]:text-[11px] max-[700px]:pl-[12px] max-[480px]:text-[10px] max-[480px]:pl-[8px]"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 60, ease: "linear", repeat: Infinity }}
+        >
+          {TRACK}
+        </motion.div>
+      </div>
 
-      <div className="flex items-center justify-between px-4 md:px-10 lg:px-20 h-12 md:h-14 gap-3">
-
-        {/* ===== MARQUEE ===== */}
-        <div className="flex-1 min-w-0 overflow-hidden">
-          <div className="marquee-wrapper">
-            <div className="marquee-track">
-
-              <div className="flex items-center gap-2 mr-10">
-                <img src={logo} alt="logo" className="h-6 md:h-7 object-contain" />
-                <p className="whitespace-nowrap text-xs md:text-sm text-white/80">
-                  Welcome to CR Cyber Crime Foundation — a leading IT, software, and cybersecurity organization in India. With 24/7 dedication, CRCCF delivers innovative software products, scalable applications, and end-to-end IT services, along with advanced cyber security, intelligence, and awareness solutions.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <img src={logo} alt="logo" className="h-6 md:h-7 object-contain" />
-                <p className="whitespace-nowrap text-xs md:text-sm text-white/80">
-                  We empower businesses and individuals with secure, reliable, and future-ready digital technologies.
-                </p>
-              </div>
-
-            </div>
-          </div>
+      {/* ── RIGHT SIDE ── */}
+      <div className="tb-right flex shrink-0 items-center gap-0 pl-0 pr-0 border-l border-[rgba(255,255,255,.07)]">
+        {/* CLOCK */}
+        <div
+          className="tb-clock-zone group flex items-center h-[42px] cursor-pointer relative"
+          onMouseEnter={() => setClockHovered(true)}
+          onMouseLeave={() => setClockHovered(false)}
+        >
+          <AnimatePresence mode="wait">
+            {clockVisible ? (
+              /* EXPANDED CLOCK */
+              <motion.div
+                key="clock-full"
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                style={{ overflow: "hidden", display: "flex" }}
+              >
+                <AnalogClock />
+              </motion.div>
+            ) : (
+              /* COLLAPSED — just a small clock icon */
+              <motion.button
+                key="clock-icon"
+                className="tb-icon-btn w-[36px] h-[42px] bg-transparent border-none cursor-pointer text-[rgba(255,255,255,.60)] flex items-center justify-center transition-all duration-[.18s] hover:text-[#fff] hover:bg-[rgba(255,255,255,.07)] max-[700px]:w-[30px] max-[480px]:w-[26px]"
+                title="Date & Time (hover to expand)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {/* mini clock SVG icon */}
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* ===== RIGHT SIDE ===== */}
-        <div className="flex items-center gap-4 md:gap-5 shrink-0">
+        <div className="tb-sep w-[1px] h-[22px] bg-[rgba(255,255,255,.10)] mx-[2px]" />
 
-          {/* SEARCH */}
-          <div className="relative hidden sm:block" ref={searchRef}>
-            <button
-              onClick={() => setShowSearch(!showSearch)}
-              className="text-white/70 hover:text-blue-400 transition-all duration-200 hover:scale-110 hover:drop-shadow-[0_0_6px_rgba(59,130,246,0.6)]"
-            >
-              <LuSearch size={18} />
-            </button>
-
-            <div
-              className={`absolute right-0 top-10 md:top-12 transition-all duration-300 ${
-                showSearch
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 -translate-y-2 pointer-events-none"
-              }`}
-            >
-              <div className="flex items-center bg-white/90 backdrop-blur-md text-black rounded-full shadow-2xl px-3 py-1 w-56 border border-gray-200">
-
-                <LuSearch className="text-gray-400 text-xs mr-2" />
-
-                <input
-                  type="text"
-                  autoFocus
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  placeholder="Search..."
-                  className="flex-1 outline-none text-xs min-w-0 bg-transparent"
-                />
-
-                {searchValue && (
-                  <LuX
-                    onClick={() => setSearchValue("")}
-                    className="text-gray-400 cursor-pointer text-xs shrink-0"
-                  />
-                )}
-
-                <button
-                  onClick={() => setShowSearch(false)}
-                  className="text-blue-500 text-xs ml-2 font-medium shrink-0"
-                >
-                  Close
-                </button>
-
-              </div>
-            </div>
-          </div>
-
-          {/* CALENDAR */}
-          <div ref={calendarRef} className="relative hidden sm:block">
-            <button
-              onClick={() => setShowCalendar(!showCalendar)}
-              className="text-white/70 hover:text-blue-400 transition-all duration-200 hover:scale-110 hover:drop-shadow-[0_0_6px_rgba(59,130,246,0.6)]"
-            >
-              <LuCalendarClock size={18} />
-            </button>
-
-            {showCalendar && (
-              <div className="absolute right-0 top-10 bg-gradient-to-br from-white to-gray-50 text-black p-4 rounded-xl shadow-2xl w-52 z-[9999] border border-blue-100 backdrop-blur-md">
-                <p className="text-xs text-blue-600 font-semibold text-center">
-                  {formattedDate}
-                </p>
-                <p className="text-lg font-bold text-center mt-1">
-                  {formattedTime}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* GALLERY (REPLACED HELP) */}
+        {/* GALLERY ICON */}
+        <div
+          className="tb-gallery-zone relative flex items-center h-[42px]"
+          onMouseEnter={() =>
+            window.innerWidth > 1024 && setGalleryHovered(true)
+          }
+          onMouseLeave={() =>
+            window.innerWidth > 1024 && setGalleryHovered(false)
+          }
+        >
           <button
-            onClick={() => window.location.href = "/gallery"}
-            className="hidden sm:block text-white/70 hover:text-blue-400 transition-all duration-200 hover:scale-110 hover:drop-shadow-[0_0_6px_rgba(59,130,246,0.6)]"
+            className="tb-icon-btn tb-gallery-btn w-[40px] h-[42px] bg-transparent border-none cursor-pointer text-[rgba(255,255,255,.60)] flex items-center justify-center transition-all duration-[.18s] hover:text-[#fff] hover:bg-[rgba(255,255,255,.07)] max-[700px]:w-[30px] max-[480px]:w-[26px]"
+            title="Gallery"
+            onClick={handleGalleryClick}
           >
-            <LuImage size={18} />
+            {/* gallery / image icon */}
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
           </button>
 
-          {/* REACH US */}
+          <AnimatePresence>
+            {galleryHovered && <GalleryPopup navigate={navigate} />}
+          </AnimatePresence>
+        </div>
+
+        <div className="tb-sep w-[1px] h-[22px] bg-[rgba(255,255,255,.10)] mx-[2px]" />
+
+        {/* REACH US */}
+        <div
+          className="tb-reach-zone relative flex items-center"
+          onMouseEnter={() => window.innerWidth > 1024 && setReachHovered(true)}
+          onMouseLeave={() =>
+            window.innerWidth > 1024 && setReachHovered(false)
+          }
+          style={{
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <button
-            onClick={() => window.location.href = "/reachus"}
-            className="hidden sm:flex items-center gap-2 bg-blue-600 px-4 py-1.5 rounded-full text-xs md:text-sm font-medium shadow-md hover:bg-blue-500 transition-all duration-200 hover:scale-105"
+            className="tb-reach-btn inline-flex items-center gap-[6px] bg-[#1A56DB] text-[#fff] text-[12px] font-[700] px-[16px] py-[7px] mx-[10px] rounded-[5px] border-none cursor-pointer no-underline whitespace-nowrap tracking-[.02em] transition-[background,transform] duration-[.18s] hover:bg-[#1044B8] hover:translate-y-[-1px] max-[700px]:px-[10px] max-[700px]:py-[5px] max-[700px]:mx-[6px] max-[700px]:text-[11px] max-[480px]:mx-[4px] max-[480px]:px-[8px] max-[480px]:py-[5px] max-[480px]:text-[10px]"
+            onClick={handleReachClick}
           >
-            <LuGlobe size={16} />
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="max-[480px]:w-[11px] max-[480px]:h-[11px]"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
             Reach Us
           </button>
 
-          {/* MOBILE MENU */}
-          <button
-            className="sm:hidden text-white/80 hover:text-blue-400 transition"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <LuMenu size={18} />
-          </button>
-
+          <AnimatePresence>
+            {reachHovered && <ReachUsPopup navigate={navigate} />}
+          </AnimatePresence>
         </div>
       </div>
-
-      {/* MOBILE MENU */}
-      {menuOpen && (
-        <div className="sm:hidden absolute right-2 top-12 bg-white text-black rounded-lg shadow-xl p-2 w-40 z-[9999] border border-gray-100">
-
-          <button onClick={() => { setShowSearch(true); setMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center gap-2">
-            <LuSearch /> Search
-          </button>
-
-          <button onClick={() => { setShowCalendar(true); setMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center gap-2">
-            <LuCalendarClock /> Calendar
-          </button>
-
-          <button onClick={() => window.location.href="/gallery"} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center gap-2">
-            <LuImage /> Gallery
-          </button>
-
-          <button onClick={() => window.location.href="/reachus"} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded text-blue-600 font-medium flex items-center gap-2">
-            <LuGlobe /> Reach Us
-          </button>
-
-        </div>
-      )}
-
-      {/* MOBILE SEARCH */}
-      {showSearch && (
-        <div className="sm:hidden absolute top-0 left-0 w-full h-12 bg-white z-[9999] shadow-md flex items-center px-4 gap-3 animate-slideDown">
-
-          <LuSearch className="text-gray-400 text-sm shrink-0" />
-
-          <input
-            type="text"
-            autoFocus
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Search..."
-            className="flex-1 outline-none text-sm text-black min-w-0"
-          />
-
-          {searchValue && (
-            <LuX onClick={() => setSearchValue("")} className="text-gray-400 text-sm shrink-0" />
-          )}
-
-          <button
-            onClick={() => {
-              setShowSearch(false);
-              setSearchValue("");
-            }}
-            className="text-blue-600 text-sm font-medium ml-2 shrink-0"
-          >
-            Cancel
-          </button>
-
-        </div>
-      )}
-
-      {/* MOBILE CALENDAR */}
-      {showCalendar && (
-        <div className="sm:hidden absolute top-14 right-2 bg-white text-black p-4 rounded-xl shadow-xl w-52 z-[9999] border border-gray-100">
-          <p className="text-xs text-blue-600 font-semibold text-center">
-            {formattedDate}
-          </p>
-          <p className="text-lg font-bold text-center mt-1">
-            {formattedTime}
-          </p>
-          <button 
-            onClick={() => setShowCalendar(false)}
-            className="mt-3 w-full bg-blue-50 text-blue-600 text-xs py-1.5 rounded-lg font-medium"
-          >
-            Close
-          </button>
-        </div>
-      )}
-
-      {/* ANIMATION */}
-      <style>
-        {`
-          .marquee-wrapper {
-            overflow: hidden;
-            width: 100%;
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-          }
-
-          .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: marqueeScroll 35s linear infinite;
-          }
-
-          .marquee-track:hover {
-            animation-play-state: paused;
-          }
-
-          @keyframes marqueeScroll {
-            0% { transform: translateX(30%); }
-            100% { transform: translateX(-100%); }
-          }
-
-          @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-          }
-
-          .animate-slideDown {
-            animation: slideDown 0.25s ease;
-          }
-        `}
-      </style>
-
     </div>
   );
 }

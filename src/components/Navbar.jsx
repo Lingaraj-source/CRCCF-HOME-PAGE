@@ -1,189 +1,387 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaBell, FaChevronDown } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaBell,
+  FaChevronDown,
+  FaSearch,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 import logo from "../assets/logo.png";
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  const menuRef = useRef(null);
   const notifRef = useRef(null);
+  const menuRef = useRef(null);
+
+  // SCROLL EFFECT
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // CLOSE OUTSIDE CLICK
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
+        setMobileOpen(false);
       }
+
       if (notifRef.current && !notifRef.current.contains(e.target)) {
         setNotifOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <header className="sticky top-[48px] md:top-[56px] z-50 bg-[#0f2b5b] text-white shadow-md">
-      <div className="px-4 md:px-10 lg:px-20 max-w-[1440px] mx-auto flex items-center justify-between py-5 md:py-6">
+    <>
+      {/* HEADER */}
+      <header
+        className={`sticky top-0 z-[100] transition-all duration-300
+        bg-[#0C1A3A]
+        border-b border-[rgba(255,255,255,.07)]
+        ${scrolled ? "shadow-[0_8px_30px_rgba(0,0,0,0.35)]" : ""}`}
+      >
+        {/* GLOW EFFECT */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-10 left-1/3 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full" />
+          <div className="absolute -top-10 right-1/3 w-72 h-72 bg-cyan-500/10 blur-3xl rounded-full" />
+        </div>
 
-        {/* LOGO */}
-        <Link to="/" className="flex items-center gap-5">
-          <img
-            src={logo}
-            alt="logo"
-            className="h-12 object-contain scale-[1.35] origin-left"
-          />
-          <div className="leading-tight">
-            <h1 className="text-lg md:text-xl font-bold tracking-wide">
-              CRCCF
-            </h1>
-            <p className="text-[10px] md:text-xs text-white/80 tracking-wider">
-              CR CYBER CRIME FOUNDATION
-            </p>
-          </div>
-        </Link>
+        <div className="relative max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20 h-[70px] flex items-center gap-[24px]">
+          {/* LOGO */}
+          {/* LOGO */}
+          <Link to="/" className="group flex shrink-0 items-center gap-[2px]">
+            {/* LOGO IMAGE */}
+            <img
+              src={logo}
+              alt="CRCCF Logo"
+              className="
+    h-[68px] w-auto
+    object-contain
+    drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]
+    transition-all duration-300
+    group-hover:scale-105
+    "
+            />
 
-        {/* DESKTOP NAV */}
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
-          <Link to="/" className="hover:text-[#3B82F6] transition">Home</Link>
-          <Link to="/about" className="hover:text-[#3B82F6] transition">About Us</Link>
-          <Link to="/services" className="hover:text-[#3B82F6] transition">Our Services</Link>
+            {/* LOGO TEXT */}
+            <div className="flex flex-col leading-[1] -ml-[2px] mt-[1px]">
+              <span className="text-[17px] font-[900] text-white tracking-tight">
+                CRCCF
+              </span>
 
-          {/* DROPDOWN */}
-          <div
-            className="relative"
-            onMouseEnter={() => setDropdownOpen(true)}
-            onMouseLeave={() => setDropdownOpen(false)}
-          >
-            <button className="flex items-center gap-1 hover:text-[#3B82F6]">
-              Skill Development <FaChevronDown size={12} />
-            </button>
-
-            <div className={`absolute left-0 top-full w-56 bg-white text-black rounded-lg shadow-lg transition ${dropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-              <Link to="/training" className="block px-4 py-2 hover:bg-blue-50">Training</Link>
-              <Link to="/internship" className="block px-4 py-2 hover:bg-blue-50">Internship</Link>
-              <Link to="/awareness" className="block px-4 py-2 hover:bg-blue-50">Awareness Programs</Link>
-              <Link to="/certification" className="block px-4 py-2 hover:bg-blue-50">Certification Course</Link>
-            </div>
-          </div>
-
-          <Link to="/insights" className="hover:text-[#3B82F6] transition">Insights</Link>
-          <Link to="/careers" className="hover:text-[#3B82F6] transition">Careers</Link>
-          <Link to="/gallery" className="hover:text-[#3B82F6] transition">Gallery</Link>
-          <Link to="/contact" className="hover:text-[#3B82F6] transition">Contact</Link>
-        </nav>
-
-        {/* RIGHT */}
-        <div className="hidden lg:flex items-center gap-5">
-
-          {/* NOTIFICATION */}
-          <div
-            ref={notifRef}
-            className="relative"
-            onMouseEnter={() => setNotifOpen(true)}
-            onMouseLeave={() => setNotifOpen(false)}
-          >
-            <div className="relative cursor-pointer">
-              <FaBell size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-xs px-1 rounded-full">
-                3
+              <span
+                className="
+      text-[7px]
+      uppercase
+      tracking-[0.14em]
+      text-white/45
+      font-semibold
+      mt-[2px]
+      whitespace-nowrap
+      "
+              >
+                CR CYBER CRIME FOUNDATION
               </span>
             </div>
+          </Link>
 
-            <AnimatePresence>
-              {notifOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                  transition={{ duration: 0.25 }}
-                  className="absolute right-0 mt-4 w-80 bg-white text-black rounded-xl shadow-2xl border border-gray-200 overflow-hidden"
-                >
-                  <div className="px-4 py-3 border-b flex justify-between">
-                    <h3 className="text-sm font-semibold">Notifications</h3>
-                  </div>
-
-                  <div>
-                    <div className="px-4 py-3 border-b hover:bg-gray-50">Cyber alert</div>
-                    <div className="px-4 py-3 border-b hover:bg-gray-50">Report update</div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <button className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-md text-sm font-semibold transition shadow-sm">
-            Report Crime
-          </button>
-        </div>
-
-        {/* MOBILE BUTTON */}
-        <button
-          className="lg:hidden text-2xl"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <FaTimes /> : <FaBars />}
-        </button>
-      </div>
-
-      {/* ✅ FIXED MOBILE MENU */}
-      {menuOpen && (
-        <div
-          ref={menuRef}
-          className="lg:hidden bg-[#0f2b5b] px-4 pb-4 space-y-3 text-white text-sm"
-        >
-          <Link to="/" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>Home</Link>
-
-          <Link to="/about" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>About Us</Link>
-
-          <Link to="/services" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>Our Services</Link>
-
-          {/* MOBILE DROPDOWN */}
-          <div className="border-b border-white/20 pb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer"
-              onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+          {/* DESKTOP NAV */}
+          <nav className="hidden lg:flex flex-1 items-center gap-[6px]">
+            <Link
+              to="/"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
             >
-              <span>Skill Development</span>
-              <FaChevronDown
-                size={14}
-                className={`transition-transform ${mobileDropdownOpen ? "rotate-180" : ""}`}
-              />
+              Home
+            </Link>
+
+            <Link
+              to="/about"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
+            >
+              About Us
+            </Link>
+
+            <Link
+              to="/services"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
+            >
+              Our Services
+            </Link>
+
+            {/* DROPDOWN */}
+            <div
+              className="relative"
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              <button
+                className="inline-flex items-center gap-[5px]
+                px-[14px] py-[8px]
+                rounded-[7px]
+                text-[14px] font-[600]
+                text-white/85
+                hover:text-white
+                hover:bg-white/10
+                transition-all duration-200"
+              >
+                Skill Development
+                <FaChevronDown
+                  size={11}
+                  className={`transition-transform duration-300 ${
+                    dropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {dropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.22 }}
+                    className="absolute top-[calc(100%+8px)] left-0
+                    min-w-[240px]
+                    bg-white rounded-xl overflow-hidden
+                    border border-gray-200
+                    shadow-[0_18px_50px_rgba(0,0,0,0.18)]"
+                  >
+                    <Link
+                      to="/training"
+                      className="block px-5 py-3 text-[14px]
+                      text-gray-700 hover:bg-blue-50
+                      hover:text-blue-600 transition"
+                    >
+                      Training
+                    </Link>
+
+                    <Link
+                      to="/internship"
+                      className="block px-5 py-3 text-[14px]
+                      text-gray-700 hover:bg-blue-50
+                      hover:text-blue-600 transition"
+                    >
+                      Internship
+                    </Link>
+
+                    <Link
+                      to="/awareness"
+                      className="block px-5 py-3 text-[14px]
+                      text-gray-700 hover:bg-blue-50
+                      hover:text-blue-600 transition"
+                    >
+                      Awareness Programs
+                    </Link>
+
+                    <Link
+                      to="/certification"
+                      className="block px-5 py-3 text-[14px]
+                      text-gray-700 hover:bg-blue-50
+                      hover:text-blue-600 transition"
+                    >
+                      Certification Course
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {mobileDropdownOpen && (
-              <div className="ml-4 mt-3 space-y-3 text-white/80 text-sm">
-                <Link to="/training" className="block py-1" onClick={() => setMenuOpen(false)}>Training</Link>
-                <Link to="/internship" className="block py-1" onClick={() => setMenuOpen(false)}>Internship</Link>
-                <Link to="/awareness" className="block py-1" onClick={() => setMenuOpen(false)}>Awareness Programs</Link>
-                <Link to="/certification" className="block py-1" onClick={() => setMenuOpen(false)}>Certification Course</Link>
-              </div>
-            )}
+            <Link
+              to="/insights"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
+            >
+              Insights
+            </Link>
+
+            <Link
+              to="/careers"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
+            >
+              Careers
+            </Link>
+
+            <Link
+              to="/gallery"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
+            >
+              Gallery
+            </Link>
+
+            <Link
+              to="/contact"
+              className="px-[14px] py-[8px]
+              rounded-[7px]
+              text-[14px] font-[600]
+              text-white/85
+              hover:text-white
+              hover:bg-white/10
+              transition-all duration-200"
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* RIGHT SIDE */}
+          <div className="hidden lg:flex items-center gap-[20px]">
+            {/* SEARCH */}
+            <button
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="text-white/70 hover:text-white transition-all duration-200"
+            >
+              <FaSearch size={16} />
+            </button>
+
+            {/* SEARCH BOX */}
+            <AnimatePresence>
+              {searchOpen && (
+                <motion.input
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 180, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  type="text"
+                  placeholder="Search..."
+                  className="h-[34px] bg-white/10 border border-white/10
+                  rounded-lg px-4 text-sm text-white outline-none
+                  placeholder:text-white/40"
+                />
+              )}
+            </AnimatePresence>
+
+            {/* NOTIFICATION */}
+            <div
+              ref={notifRef}
+              className="relative"
+              onMouseEnter={() => setNotifOpen(true)}
+              onMouseLeave={() => setNotifOpen(false)}
+            >
+              <button
+                className="relative text-white/75 hover:text-white
+                transition-all duration-200 hover:scale-110"
+              >
+                <FaBell size={18} />
+
+                <span
+                  className="absolute -top-2 -right-2
+                  w-[16px] h-[16px]
+                  rounded-full bg-red-500
+                  text-[9px] font-bold text-white
+                  flex items-center justify-center
+                  border border-[#0C1A3A]"
+                >
+                  3
+                </span>
+              </button>
+
+              <AnimatePresence>
+                {notifOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                    transition={{ duration: 0.22 }}
+                    className="absolute right-0 mt-5 w-80
+                    bg-white rounded-2xl overflow-hidden
+                    border border-gray-200
+                    shadow-[0_20px_60px_rgba(0,0,0,0.20)]"
+                  >
+                    <div className="px-5 py-4 border-b">
+                      <h3 className="text-sm font-semibold text-black">
+                        Notifications
+                      </h3>
+                    </div>
+
+                    <div className="px-5 py-4 border-b hover:bg-gray-50 transition text-black">
+                      Cyber Alert
+                    </div>
+
+                    <div className="px-5 py-4 hover:bg-gray-50 transition text-black">
+                      Report Update
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* BUTTON */}
+            <button
+              className="h-[38px] px-[18px]
+              rounded-[8px]
+              bg-gradient-to-r from-red-500 to-orange-500
+              text-white text-[13px] font-[700]
+              shadow-[0_0_25px_rgba(239,68,68,0.35)]
+              hover:scale-[1.03]
+              hover:shadow-[0_0_30px_rgba(239,68,68,0.55)]
+              transition-all duration-300"
+            >
+              Report Crime
+            </button>
           </div>
 
-          <Link to="/insights" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>Insights</Link>
-
-          <Link to="/careers" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>Careers</Link>
-
-          <Link to="/gallery" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>Gallery</Link>
-
-          <Link to="/contact" className="block border-b border-white/20 pb-2" onClick={() => setMenuOpen(false)}>Contact</Link>
-
+          {/* MOBILE BUTTON */}
           <button
-            className="w-full bg-red-600 py-2 rounded-md mt-3"
-            onClick={() => setMenuOpen(false)}
+            className="lg:hidden ml-auto text-white text-[22px]"
+            onClick={() => setMobileOpen(!mobileOpen)}
           >
-            Report Crime
+            {mobileOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
-      )}
-    </header>
+      </header>
+    </>
   );
 }
