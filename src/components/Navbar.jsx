@@ -278,35 +278,38 @@ export default function Navbar() {
 
           {/* RIGHT SIDE */}
           <div className="hidden lg:flex items-center gap-[20px]">
-            {/* SEARCH */}
-            <div className="relative flex items-center justify-center">
-              <button
-                onClick={() => setSearchOpen(!searchOpen)}
-                className="flex items-center justify-center text-white/70 hover:text-white transition-all duration-200"
-              >
-                <FaSearch size={16} />
-              </button>
-
+            
+            {/* SEARCH - UPDATED TO PUSH CONTENT INSTEAD OF OVERLAPPING */}
+            <div className="flex items-center">
               {/* SEARCH BOX */}
               <AnimatePresence>
                 {searchOpen && (
                   <motion.div
                     initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 180, opacity: 1 }}
+                    animate={{ width: 190, opacity: 1 }}
                     exit={{ width: 0, opacity: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="absolute right-full mr-3 overflow-hidden flex items-center"
+                    className="overflow-hidden"
                   >
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      className="h-[34px] w-full bg-white/10 border border-white/10
-                      rounded-lg px-4 text-sm text-white outline-none
-                      placeholder:text-white/40"
-                    />
+                    <div className="pr-3">
+                      <input
+                        type="text"
+                        placeholder="Search..."
+                        className="h-[34px] w-full bg-white/10 border border-white/10
+                        rounded-lg px-4 text-sm text-white outline-none
+                        placeholder:text-white/40 focus:border-white/30 transition-colors"
+                      />
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              <button
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="flex items-center justify-center text-white/70 hover:text-white transition-all duration-200 w-[24px] h-[24px]"
+              >
+                {searchOpen ? <FaTimes size={18} /> : <FaSearch size={16} />}
+              </button>
             </div>
 
             {/* NOTIFICATION */}
@@ -373,7 +376,7 @@ export default function Navbar() {
               shadow-[0_0_25px_rgba(185,28,28,0.35)]
               hover:scale-[1.03]
               hover:shadow-[0_0_30px_rgba(185,28,28,0.55)]
-              transition-all duration-300"
+              transition-all duration-300 whitespace-nowrap"
             >
               Report Crime
             </button>
