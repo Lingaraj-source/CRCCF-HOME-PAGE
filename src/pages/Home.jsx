@@ -5,8 +5,6 @@ import { Suspense, lazy } from "react";
 /* ================= ABOVE THE FOLD ================= */
 import Hero from "../sections/Hero";
 import TrustedBy from "../sections/TrustedBy";
-import EventBanner from "../sections/EventBanner";
-
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
 import WhoWeAre from "../sections/WhoWeAre";
 import TechStack from "../sections/TechStack";
@@ -17,7 +15,6 @@ const PurposeMission = lazy(() => import("../sections/PurposeMission"));
 const WhatWeDo = lazy(() => import("../sections/WhatWeDo"));
 const Services = lazy(() => import("../sections/Services"));
 const Activities = lazy(() => import("../sections/Activities"));
-const Innovation = lazy(() => import("../sections/Innovation"));
 const Projects = lazy(() => import("../sections/Projects"));
 const Stats = lazy(() => import("../sections/Stats"));
 const Testimonials = lazy(() => import("../sections/Testimonials"));
@@ -33,7 +30,6 @@ export default function Home() {
       {/* ================= ABOVE FOLD ================= */}
       <Hero />
       <TrustedBy />
-      <EventBanner />
 
       {/* ================= WHO WE ARE ================= */}
       <WhoWeAre />
@@ -46,7 +42,6 @@ export default function Home() {
         <WhatWeDo />
         <Services />
         <Activities />
-        <Innovation />
         <TechStack/>
         <Projects />
         <Stats />
