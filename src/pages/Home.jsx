@@ -13,7 +13,6 @@ import TechStack from "../sections/TechStack";
 const Introduction = lazy(() => import("../sections/Introduction"));
 const PurposeMission = lazy(() => import("../sections/PurposeMission"));
 const WhatWeDo = lazy(() => import("../sections/WhatWeDo"));
-const Services = lazy(() => import("../sections/Services"));
 const Activities = lazy(() => import("../sections/Activities"));
 const Projects = lazy(() => import("../sections/Projects"));
 const Stats = lazy(() => import("../sections/Stats"));
@@ -40,7 +39,6 @@ export default function Home() {
         <Introduction />
         <PurposeMission />
         <WhatWeDo />
-        <Services />
         <Activities />
         <TechStack/>
         <Projects />
