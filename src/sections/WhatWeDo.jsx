@@ -94,11 +94,10 @@ export default function WhatWeDo() {
                   }}
                   onMouseLeave={() => setIsPaused(false)}
                   onClick={() => setActiveIndex(i)}
-                  className={`group relative w-full text-left flex items-center p-4 rounded-xl transition-all duration-300 border ${
-                    isActive
+                  className={`group relative w-full text-left flex items-center p-4 rounded-xl transition-all duration-300 border ${isActive
                       ? "bg-white border-transparent shadow-lg scale-[1.02]"
                       : "bg-slate-50/50 border-slate-200"
-                  }`}
+                    }`}
                 >
                   {isActive && (
                     <motion.div

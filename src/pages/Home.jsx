@@ -4,13 +4,14 @@ import { Suspense, lazy } from "react";
 
 /* ================= ABOVE THE FOLD ================= */
 import Hero from "../sections/Hero";
+import Introduction from "../sections/Introduction";
 import TrustedBy from "../sections/TrustedBy";
 import Innovation from "../sections/Innovation";
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
 
 /* ================= LAZY SECTIONS ================= */
 const WhoWeAre = lazy(() => import("../sections/WhoWeAre"));
-const Introduction = lazy(() => import("../sections/Introduction"));
+// const Introduction = lazy(() => import("../sections/Introduction"));
 const PurposeMission = lazy(() => import("../sections/PurposeMission"));
 const WhatWeDo = lazy(() => import("../sections/WhatWeDo"));
 const Services = lazy(() => import("../sections/Services"));
@@ -40,7 +41,7 @@ export default function Home() {
       {/* ================= BELOW FOLD ================= */}
       <Suspense fallback={null}>
         
-        <Introduction />
+        <Introduction/>
         <PurposeMission />
         <WhatWeDo />
         <Services/>
