@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 // Ensure the extension (.png, .svg, etc.) matches your actual logo file
-import logoImg from "../assets/logo.png"; 
+import logoImg from "../assets/Logo.png"; 
 
 export default function Introduction() {
   return (

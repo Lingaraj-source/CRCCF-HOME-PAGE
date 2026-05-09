@@ -54,7 +54,8 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="relative text-white overflow-hidden bg-[#173a67] opacity-0 border-t border-white/10"
+      // Changed bg-[#173a67] to bg-[#0a1128] to match the darker navbar
+      className="relative text-white overflow-hidden bg-[#0a1128] opacity-0 border-t border-white/10"
     >
       {/* 🏃‍♂️ RUNNING SOCIAL MEDIA BACKGROUND (MARQUEE) */}
       <div className="absolute top-1/3 left-0 w-[200%] flex overflow-hidden pointer-events-none opacity-[0.03] z-0">

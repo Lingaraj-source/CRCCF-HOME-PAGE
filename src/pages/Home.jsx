@@ -5,6 +5,7 @@ import { Suspense, lazy } from "react";
 /* ================= ABOVE THE FOLD ================= */
 import Hero from "../sections/Hero";
 import TrustedBy from "../sections/TrustedBy";
+import Innovation from "../sections/Innovation";
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
 
 /* ================= LAZY SECTIONS ================= */
@@ -44,6 +45,7 @@ export default function Home() {
         <WhatWeDo />
         <Services/>
         <Activities />
+        <Innovation/>
         <TechStack/>
         <Projects />
         <InternshipSection/>
