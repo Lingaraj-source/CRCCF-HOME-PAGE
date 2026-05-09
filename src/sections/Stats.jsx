@@ -6,12 +6,17 @@ const StatCard = ({ value, label, subtext, icon: Icon, delay }) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef();
 
-  const targetValue = parseInt(value.replace(/\D/g, ""));
-  const suffix = value.replace(/[0-9]/g, "");
+  // Improved parser to correctly handle decimals (e.g., 99.9) and integers
+  const isDecimal = value.includes(".");
+  const numericString = value.replace(/[^0-9.]/g, "");
+  const targetValue = parseFloat(numericString);
+  const suffix = value.replace(/[0-9.]/g, "");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
       { threshold: 0.2 }
     );
     if (domRef.current) observer.observe(domRef.current);
@@ -28,7 +33,11 @@ const StatCard = ({ value, label, subtext, icon: Icon, delay }) => {
     const animate = (time) => {
       const progress = Math.min((time - startTime) / duration, 1);
       const eased = easeOut(progress);
-      const valueNow = Math.floor(eased * targetValue);
+      
+      // Handle decimals gracefully for the UI
+      const valueNow = isDecimal
+        ? (eased * targetValue).toFixed(1)
+        : Math.floor(eased * targetValue);
 
       setCount(valueNow);
 
@@ -40,38 +49,35 @@ const StatCard = ({ value, label, subtext, icon: Icon, delay }) => {
     };
 
     requestAnimationFrame(animate);
-  }, [isVisible, targetValue]);
+  }, [isVisible, targetValue, isDecimal]);
 
   return (
     <div
       ref={domRef}
-      className="group relative flex items-center gap-6 p-8 rounded-[28px] 
-      bg-white/70 backdrop-blur-xl border border-slate-200/70 
-      shadow-[0_10px_40px_rgba(0,0,0,0.04)]
-      transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
-      hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:border-primary/40 overflow-hidden"
+      className="group relative flex-1 p-8 border-b lg:border-b-0 lg:border-r border-slate-200/60 last:border-0 
+      hover:bg-slate-50/50 transition-colors duration-500 overflow-hidden flex flex-col justify-center"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-700 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
+      {/* Subtle Premium Hover Glow */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-100/30 via-transparent to-transparent transition-opacity duration-700 pointer-events-none" />
 
-      <div className="relative z-10 flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl 
-      bg-primary text-white 
-      shadow-lg shadow-primary/30
-      transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
-      group-hover:scale-110 group-hover:rotate-6">
-        <Icon size={30} strokeWidth={2.2} />
-      </div>
-
-      <div className="relative z-10 flex flex-col">
-        <h3 className="text-4xl md:text-5xl font-extrabold tracking-[-0.02em] text-[#0F172A] tabular-nums">
+      {/* Top Row: Icon + Value */}
+      <div className="flex items-center gap-4 mb-4 relative z-10">
+        <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:rotate-3">
+          <Icon size={24} strokeWidth={2} />
+        </div>
+        
+        <h3 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0F172A] tabular-nums group-hover:text-blue-600 transition-colors duration-500">
           {count}{suffix}
         </h3>
+      </div>
 
-        <p className="text-xs font-extrabold text-primary uppercase tracking-[0.2em] mt-1">
+      {/* Bottom Row: Text Content */}
+      <div className="relative z-10">
+        <p className="text-[11px] font-extrabold text-blue-600 uppercase tracking-[0.2em] mb-1.5">
           {label}
         </p>
-
-        <p className="text-xs text-slate-500 mt-2 font-medium leading-relaxed">
+        <p className="text-sm text-slate-500 font-medium leading-relaxed">
           {subtext}
         </p>
       </div>
@@ -88,46 +94,45 @@ export default function Stats() {
   ];
 
   return (
-    <section className="py-28 px-6 bg-[#F8FAFC]">
+    // Reduced outer padding (py-28 to py-16) to save vertical space
+    <section className="py-16 px-6 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto">
-
-        {/* Badge */}
-        <div className="flex justify-center mb-8">
-          <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full 
-          bg-blue-50 border border-blue-100 
-          text-primary text-[11px] font-extrabold uppercase tracking-[0.25em]">
+        
+        {/* Header Section - Reduced bottom margin (mb-24 to mb-12) */}
+        <div className="flex flex-col items-center text-center mb-12">
+          {/* Badge */}
+          <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[11px] font-extrabold uppercase tracking-[0.25em] mb-8 shadow-sm">
             🛡️ Network Intelligence
           </span>
-        </div>
 
-        {/* ✅ Clean Bold Heading */}
-        <div className="text-center mb-24">
+          {/* Heading */}
           <h2 className="text-4xl md:text-5xl font-bold font-[Inter] leading-tight mb-6 text-[#0F172A] tracking-[-0.01em]">
-            Our{" "}
-            <span className="text-[#93C5FD]">
-              Digital
-            </span>{" "}
-            Footprint
+            Our <span className="text-[#93C5FD]">Digital</span> Footprint
           </h2>
 
           <p className="text-slate-500 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
             Leading the charge in{" "}
-            <span className="text-primary font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+            <span className="text-blue-600 font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
               Cyber Defense
             </span>{" "}
             and{" "}
-            <span className="text-primary font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+            <span className="text-blue-600 font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
               Product Innovation
-            </span>. 
-            Empowering modern businesses with secure, scalable technology.
+            </span>. Empowering modern businesses with secure, scalable technology.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {stats.map((stat, i) => (
-            <StatCard key={i} {...stat} delay={i * 150} />
-          ))}
+        {/* Unified Dashboard Strip Container */}
+        <div className="relative">
+          {/* Background Ambient Glow for Premium Feel */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 via-blue-400/10 to-blue-600/10 rounded-[2.5rem] blur-xl opacity-70" />
+          
+          {/* Main Strip Panel */}
+          <div className="relative bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-[2rem] shadow-2xl shadow-slate-200/50 flex flex-col lg:flex-row overflow-hidden transform transition-all duration-700 hover:shadow-blue-900/5 hover:border-blue-200/60">
+            {stats.map((stat, i) => (
+              <StatCard key={i} {...stat} delay={i * 150} />
+            ))}
+          </div>
         </div>
 
       </div>

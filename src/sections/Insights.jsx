@@ -1,0 +1,177 @@
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Newspaper, ArrowRight, ArrowLeft, Calendar } from 'lucide-react'
+
+const posts = [
+  {
+    cat: 'Cybersecurity',
+    catColor: '#1A56DB',
+    date: 'April 15, 2025',
+    title: 'How to Protect Yourself from UPI Frauds in India',
+    excerpt: 'With digital payments growing rapidly, UPI fraud cases have surged. Here is a comprehensive guide to staying safe while using UPI apps.',
+    fullContent: '1. Never share your UPI PIN or OTP with anyone.\n2. Do not scan QR codes to receive money; scanning is only for paying.\n3. Verify the receiver\'s UPI ID and name before transferring funds.\n4. Set transaction limits on your banking application.',
+    readTime: '5 min read',
+  },
+  {
+    cat: 'Technology',
+    catColor: '#7C3AED',
+    date: 'April 10, 2025',
+    title: 'Top 10 Cybersecurity Practices Every Business Should Follow',
+    excerpt: 'Small and medium businesses are increasingly targeted by cybercriminals. Learn the essential security practices that every organisation must implement.',
+    fullContent: '1. Implement Multi-Factor Authentication (MFA).\n2. Regularly backup critical data offline.\n3. Train employees to recognize phishing and social engineering.\n4. Keep software, operating systems, and firmware updated.',
+    readTime: '7 min read',
+  },
+  {
+    cat: 'Legal',
+    catColor: '#DC2626',
+    date: 'April 5, 2025',
+    title: 'Understanding the IT Act 2000 — Your Digital Rights Explained',
+    excerpt: 'The Information Technology Act provides legal remedies for cybercrime victims. Understand how to use the law to protect yourself and seek justice.',
+    fullContent: 'Section 43: Penalty for damage to computer system without permission.\nSection 66: Computer related offences.\nSection 66C: Punishment for identity theft.\nSection 66D: Punishment for cheating by personation by using computer resource.',
+    readTime: '6 min read',
+  },
+]
+
+function InsightCard({ p, index }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  useEffect(() => {
+    const handleOutside = () => {
+      setIsOpen(false);
+      setIsFlipped(false);
+    }
+    window.addEventListener('click', handleOutside)
+    return () => window.removeEventListener('click', handleOutside)
+  }, [])
+
+  const handleOpen = (e) => {
+    if (window.innerWidth <= 1024) {
+      e.stopPropagation();
+      setIsOpen(prev => !prev);
+      if (isOpen) setIsFlipped(false); // Reset flip if closing
+    }
+  };
+
+  const handleReadMore = (e) => {
+    e.stopPropagation();
+    setIsFlipped(true);
+  };
+
+  const handleGoBack = (e) => {
+    e.stopPropagation();
+    setIsFlipped(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (window.innerWidth > 1024) {
+      setIsFlipped(false);
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <motion.article
+      className={`group relative bg-[#fff] border border-solid border-[#E5E7EB] rounded-[14px] h-[clamp(280px,28vw,340px)] shadow-[0_4px_20px_rgba(0,0,0,0.05)] [transform-style:preserve-3d] [perspective:2000px] flex items-center justify-center text-[#111827] transition-all duration-[0.3s] hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] ${isOpen ? 'shadow-[0_15px_40px_rgba(0,0,0,0.1)]' : ''} max-[560px]:h-[300px]`}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: .5, delay: index * .10 }}
+    >
+      {/* PAGE 3: Deepest Layer (Full Content) */}
+      <div className={`absolute top-0 left-0 p-[24px] flex flex-col gap-[12px] w-full h-full justify-start opacity-0 transition-[opacity,transform] duration-[0.4s,0.6s] ease-[ease-in-out,cubic-bezier(0.4,0,0.2,1)] pl-[40px] bg-[#fafafa] rounded-[14px] [transform-origin:0] [backface-visibility:hidden] z-[4] group-hover:opacity-100 ${isOpen ? 'opacity-100' : ''}`}>
+        <h4 className="text-[15px] font-[700] text-[#111827] pb-[8px]">Full Article</h4>
+        <div className="text-[12.5px] text-[#4B5563] leading-[1.6] flex flex-col gap-[8px] flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-[4px] [&::-webkit-scrollbar-thumb]:bg-[#D1D5DB] [&::-webkit-scrollbar-thumb]:rounded-[4px]">
+          {p.fullContent.split('\n').map((line, i) => (
+            <p key={i} className="m-0">{line}</p>
+          ))}
+        </div>
+        <div className="flex items-center justify-between pt-[10px] mt-auto">
+          <button className="inline-flex items-center gap-[5px] text-[12.5px] font-[700] bg-none border-none cursor-pointer p-0 transition-[gap] duration-[0.2s] uppercase tracking-[.04em] hover:gap-[8px]" style={{ color: p.catColor }} onClick={handleGoBack}>
+            <ArrowLeft size={13} /> Go Back
+          </button>
+        </div>
+      </div>
+
+      {/* PAGE 2: Middle Layer (Excerpt) */}
+      <div className={`absolute top-0 left-0 p-[24px] flex flex-col gap-[12px] w-full h-full justify-start opacity-0 transition-[opacity,transform] duration-[0.4s,0.6s] ease-[ease-in-out,cubic-bezier(0.4,0,0.2,1)] pl-[40px] bg-[#fafafa] rounded-[14px] [transform-origin:0] [backface-visibility:hidden] z-[5] group-hover:opacity-100 ${isOpen ? 'opacity-100' : ''} ${isFlipped ? '[transform:rotateY(-85deg)] shadow-[8px_8px_18px_rgba(0,0,0,0.08)]' : ''}`}>
+        <div className="flex items-center gap-[10px] flex-wrap">
+          <span className="flex items-center gap-[4px] text-[12px] text-[#9CA3AF]">
+            <Calendar size={12} />
+            {p.date}
+          </span>
+        </div>
+
+        <p className="text-[13.5px] text-[#6B7280] leading-[1.65] flex-1 m-0">{p.excerpt}</p>
+
+        <div className="flex items-center justify-between pt-[10px] mt-auto">
+          <span className="text-[12px] text-[#9CA3AF] font-[500]">{p.readTime}</span>
+          <button className="inline-flex items-center gap-[5px] text-[12.5px] font-[700] bg-none border-none cursor-pointer p-0 transition-[gap] duration-[0.2s] uppercase tracking-[.04em] hover:gap-[8px]" style={{ color: p.catColor }} onClick={handleReadMore}>
+            Read More <ArrowRight size={13} />
+          </button>
+        </div>
+      </div>
+
+      {/* COVER: Top Layer */}
+      <div
+        className={`absolute top-0 left-0 w-full h-full rounded-[14px] cursor-pointer transition-[transform,box-shadow] duration-[0.6s] ease-[cubic-bezier(0.4,0,0.2,1)] [transform-origin:0] shadow-[2px_0_12px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center z-[10] p-[30px_20px] text-center [backface-visibility:hidden] bg-[#fff] group-hover:[transform:rotateY(-80deg)] group-hover:shadow-[10px_10px_20px_rgba(0,0,0,0.1)] ${isOpen ? '[transform:rotateY(-80deg)] shadow-[10px_10px_20px_rgba(0,0,0,0.1)]' : ''} ${isFlipped ? '[transform:rotateY(-95deg)] shadow-[12px_12px_24px_rgba(0,0,0,0.12)]' : ''}`}
+        style={{
+          background: `linear-gradient(135deg, ${p.catColor}15, ${p.catColor}05)`,
+          borderRight: `4px solid ${p.catColor}40`
+        }}
+        onClick={handleOpen}
+      >
+        <div className="w-[60px] h-[60px] rounded-[16px] flex items-center justify-center mb-[24px]" style={{ background: `${p.catColor}15`, color: p.catColor }}>
+          <Newspaper size={32} />
+        </div>
+        <span className="text-[11px] font-[700] px-[10px] py-[3px] rounded-[999px] uppercase tracking-[.05em]" style={{ background: `${p.catColor}12`, color: p.catColor, border: `1px solid ${p.catColor}25`, marginBottom: '16px' }}>
+          {p.cat}
+        </span>
+        <h3 className="text-[18px] font-[800] text-[#111827] leading-[1.4] mb-[16px] m-0">{p.title}</h3>
+        <div className="text-[12px] font-[600] uppercase tracking-[0.05em] opacity-[0.6] mt-auto" style={{ color: p.catColor }}>
+          <span className="max-[1024px]:hidden">Hover to open</span>
+          <span className="hidden max-[1024px]:inline">Tap to open</span>
+        </div>
+      </div>
+    </motion.article>
+  )
+}
+
+export default function Insights() {
+  return (
+    <section id="insights" className="section-padding bg-white relative">
+      <div className="container-custom">
+        <motion.div
+          className="text-center mb-[clamp(40px,8vw,64px)] flex flex-col items-center"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: .55 }}
+        >
+          <p className="section-tag">Insights & Resources</p>
+          <h2 className="section-title">
+            Latest <span className="section-title-accent">Insights</span>
+          </h2>
+          <p className="section-subtitle">
+            Stay informed with expert articles, cyber safety tips, and industry news from the CRCCF team.
+          </p>
+        </motion.div>
+
+
+        <div className="grid grid-cols-[repeat(3,1fr)] gap-[22px] max-[860px]:grid-cols-[repeat(2,1fr)] max-[860px]:gap-[16px] max-[560px]:grid-cols-[1fr] max-[560px]:gap-[14px]">
+          {posts.map((p, i) => (
+            <InsightCard key={p.title} p={p} index={i} />
+          ))}
+        </div>
+
+        <div className="flex justify-center mt-[40px]">
+          <button className="btn btn-blue">
+            View All Insights <ArrowRight size={15} />
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+

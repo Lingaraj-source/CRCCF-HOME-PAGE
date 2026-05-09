@@ -17,7 +17,7 @@ import {
 export default function WhyChooseUs() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [cardWidth, setCardWidth] = useState(340); // Added state for dynamic width
+  const [cardWidth, setCardWidth] = useState(340);
 
   const features = [
     {
@@ -69,26 +69,20 @@ export default function WhyChooseUs() {
 
   const totalCards = features.length;
 
-  // Track screen size to adjust card width for mobile responsiveness
   useEffect(() => {
     const handleResize = () => {
-      // 640px is the Tailwind 'sm' breakpoint
       setCardWidth(window.innerWidth < 640 ? 300 : 340);
     };
-
-    handleResize(); // Set on initial load
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Premium Auto-Play Logic
   useEffect(() => {
     if (isHovered) return;
-
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev === totalCards - 1 ? 0 : prev + 1));
-    }, 3500); // Smoothly glides every 3.5 seconds
-
+    }, 3500);
     return () => clearInterval(interval);
   }, [isHovered, totalCards]);
 
@@ -100,19 +94,15 @@ export default function WhyChooseUs() {
     setActiveIndex((prev) => (prev === totalCards - 1 ? 0 : prev + 1));
   };
 
-  // Calculates how far to move the track based on the active index
-  // Card width + 24px (gap-6) = dynamic shift for mobile/desktop
   const trackOffset = -(activeIndex * (cardWidth + 24));
 
   return (
     <section className="py-20 bg-[#F8FAFC] font-sans relative overflow-hidden">
-      {/* Subtle Background Elements */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-100/40 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-50/40 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-[1440px] mx-auto px-4 md:px-12 relative z-10">
         {/* ================= HEADER ================= */}
-        {/* Reduced mb-14 to mb-8 to close the gap between text and cards */}
         <div className="text-center max-w-3xl mx-auto mb-8">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -124,27 +114,25 @@ export default function WhyChooseUs() {
             Why Choose Us
           </motion.div>
 
-          {/* Changed font-black to font-extrabold and slate-900 to slate-800 for a cleaner look */}
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight leading-tight"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Inter] text-[#0F172A] mb-4 tracking-[-0.01em] leading-tight"
           >
             Building Trust Through <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
               Expertise & Innovation
             </span>
           </motion.h2>
 
-          {/* Increased text size to text-base/text-lg for better reading */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
+            className="text-slate-500 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium"
           >
             At CR Cyber Crime Foundation, we go beyond traditional learning by
             integrating cybersecurity, research, and real-world applications.
@@ -152,7 +140,6 @@ export default function WhyChooseUs() {
         </div>
 
         {/* ================= ANIMATED CAROUSEL AREA ================= */}
-        {/* Removed extra vertical padding (py-10) to pull cards closer to text */}
         <div
           className="relative group px-2 md:px-4 py-4"
           onMouseEnter={() => setIsHovered(true)}
@@ -175,9 +162,8 @@ export default function WhyChooseUs() {
 
           {/* Framer Motion Animated Track */}
           <div className="overflow-hidden w-full relative h-[420px] flex items-center touch-pan-y">
-            {/* The Track that slides left/right */}
             <motion.div
-              drag="x" // Added swipe support for mobile
+              drag="x"
               dragConstraints={{ left: trackOffset, right: trackOffset }}
               onDragEnd={(_, info) => {
                 if (info.offset.x < -50) slideRight();
@@ -190,7 +176,6 @@ export default function WhyChooseUs() {
                 damping: 30,
                 mass: 1,
               }}
-              // Removed hardcoded left Tailwind classes, replaced with dynamic style for centering
               className="flex gap-6 absolute"
               style={{ left: `calc(50% - ${cardWidth / 2}px)` }}
             >
@@ -212,12 +197,10 @@ export default function WhyChooseUs() {
                         : "border-slate-100 shadow-sm z-10 hover:border-blue-100 hover:opacity-70"
                     }`}
                   >
-                    {/* Glowing Top Line for Active Card */}
                     {isActive && (
-                      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-t-3xl" />
+                      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-500 rounded-t-3xl" />
                     )}
 
-                    {/* Icon Container */}
                     <div
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 transition-all duration-500 ${
                         isActive
@@ -228,7 +211,6 @@ export default function WhyChooseUs() {
                       {item.icon}
                     </div>
 
-                    {/* Typography - Cleaner font weights */}
                     <h3
                       className={`text-xl font-bold mb-3 leading-tight transition-colors duration-300 ${
                         isActive ? "text-slate-800" : "text-slate-600"

@@ -1,157 +1,202 @@
-import { motion } from "framer-motion";
-import { FaBullseye, FaRocket, FaBrain, FaBolt } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { Target, Rocket, BookOpen, Zap } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
 export default function PurposeMission() {
-  const [flipped, setFlipped] = useState(null);
-  const [autoFlipped, setAutoFlipped] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [activeCards, setActiveCards] = useState([]); // Tracks clicked/auto-opened cards
+  const [hoveredCard, setHoveredCard] = useState(null); // Tracks mouse hover
+  const [hasInteracted, setHasInteracted] = useState(false); // Tracks if user took control
 
-  const data = [
+  // 1. Create a ref to track when the section scrolls into view
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  // ⏱️ SCROLL-AWARE AUTO REVEAL & HIDE
+  useEffect(() => {
+    // Wait until the section is visible. If user already interacted, cancel automation.
+    if (!isInView || hasInteracted) return;
+
+    // Open both cards smoothly after scrolling into view
+    const openTimer = setTimeout(() => {
+      setActiveCards(["purpose", "mission"]);
+    }, 600);
+
+    // Close both cards automatically after 3 seconds
+    const closeTimer = setTimeout(() => {
+      // Double check they haven't interacted in the meantime
+      setActiveCards((prev) => (hasInteracted ? prev : []));
+    }, 3600); 
+
+    return () => {
+      clearTimeout(openTimer);
+      clearTimeout(closeTimer);
+    };
+  }, [isInView, hasInteracted]);
+
+  const handleInteraction = (id) => {
+    if (!hasInteracted) {
+      setHasInteracted(true); // Stop auto-timers
+      setActiveCards([]);     // Close auto-opened cards immediately
+    }
+    setHoveredCard(id);
+  };
+
+  const handleTap = (id) => {
+    if (!hasInteracted) {
+      setHasInteracted(true);
+      setActiveCards([]);
+    }
+    
+    // Toggle the clicked card independently
+    setActiveCards((prev) => 
+      prev.includes(id) 
+        ? prev.filter((cardId) => cardId !== id) // Remove if already open
+        : [...prev, id] // Add if closed
+    );
+  };
+
+  const cardsData = [
     {
-      icon: <FaBullseye />,
+      id: "purpose",
       title: "Purpose",
-      text: "Our purpose is to strengthen digital safety and awareness by bridging the gap between knowledge and real-world cyber challenges.",
-      extra: (
-        <div className="flex gap-2.5 flex-wrap mt-6 justify-center">
-          {["Digital Safety", "Awareness", "Education"].map((t, i) => (
-            <span
-              key={i}
-              className="px-3.5 py-1.5 text-[11px] font-semibold tracking-wider uppercase rounded-full bg-white/10 border border-white/20 text-white backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors hover:bg-white/20 cursor-default"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      ),
+      icon: Target,
+      text: "Our purpose is to enhance digital safety and awareness by bridging the gap between: 📚 Knowledge and ⚠️ Real-world cyber threats. We focus on educating, guiding, and supporting communities to adopt safe and responsible digital practices.",
+      tags: [
+        { text: "Digital Safety" },
+        { text: "Awareness" },
+        { text: "Education" },
+      ],
     },
     {
-      icon: <FaRocket />,
+      id: "mission",
       title: "Mission",
-      text: "Our mission is to lead the Cyber Revolution using innovation, research, and modern technology.",
-      extra: (
-        <div className="grid grid-cols-2 gap-3 mt-6">
-          <div className="p-3 rounded-xl bg-white/10 border border-white/20 text-white text-[11px] font-semibold tracking-wider uppercase flex items-center justify-center gap-2 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors hover:bg-white/20 cursor-default">
-            <FaBrain className="text-blue-200 text-sm" /> Research
-          </div>
-          <div className="p-3 rounded-xl bg-white/10 border border-white/20 text-white text-[11px] font-semibold tracking-wider uppercase flex items-center justify-center gap-2 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors hover:bg-white/20 cursor-default">
-            <FaBolt className="text-blue-200 text-sm" /> Future Ready
-          </div>
-        </div>
-      ),
+      icon: Rocket,
+      text: "Our mission is to lead the Cyber Revolution 🚀 by combining: 🔐 Cybersecurity Awareness, ⚙️ Advanced Technology, and 📊 Research-Driven Solutions. We are dedicated to equipping individuals with practical skills, industry knowledge, and ethical values.",
+      tags: [
+        { icon: BookOpen, text: "Research" },
+        { icon: Zap, text: "Future Ready" },
+      ],
+      delay: 0.15,
     },
   ];
 
-  // ⏱️ AUTO FLIP AFTER 3s (Smart Reveal)
-  useEffect(() => {
-    if (hasInteracted) return;
-
-    const timer = setTimeout(() => {
-      setAutoFlipped(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [hasInteracted]);
-
-  const handleInteraction = (index) => {
-    setHasInteracted(true);
-    setAutoFlipped(false); // Hand control fully to the user
-    setFlipped(index);
-  };
-
+  // The ref is attached to this section so Framer Motion knows when it enters the screen
   return (
-    <section className="py-20 bg-[#F8FAFC] relative overflow-hidden">
-      {/* Subtle ambient background glows for premium depth */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl pointer-events-none"></div>
+    <section ref={sectionRef} className="relative pb-[clamp(48px,8vw,80px)] bg-[#F9FAFB]">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[clamp(20px,4vw,50px)] mt-[clamp(24px,4vw,40px)] relative z-10">
+          
+          {cardsData.map((card) => {
+            // Check if THIS specific card is in the activeCards array or currently hovered
+            const isActive = hoveredCard === card.id || activeCards.includes(card.id);
+            const Icon = card.icon;
 
-      <div className="max-w-[1200px] mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-10 relative z-10">
-        {data.map((item, i) => {
-          // Card is flipped if manually targeted, OR if auto-flip triggered and user hasn't touched anything yet
-          const isFlipped = flipped === i || (autoFlipped && !hasInteracted);
+            return (
+              <motion.div
+                key={card.id}
+                data-active={isActive}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: card.delay || 0 }}
+                onMouseEnter={() => handleInteraction(card.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                onClick={() => handleTap(card.id)}
+                className={`
+                  group relative bg-white rounded-[16px] p-[clamp(24px,4vw,40px)] min-h-[180px] 
+                  shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-solid border-slate-200 
+                  flex flex-col justify-center overflow-hidden cursor-pointer 
+                  transition-all duration-500 ease-out
 
-          return (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: i * 0.1 }}
-              className="h-[280px] perspective group cursor-pointer"
-              onClick={() => {
-                setHasInteracted(true);
-                setAutoFlipped(false);
-                setFlipped(flipped === i ? null : i); // Toggle on click
-              }}
-              onMouseEnter={() => handleInteraction(i)}
-              onMouseLeave={() => setFlipped(null)}
-            >
-              <div
-                className={`relative w-full h-full rounded-3xl transition-transform duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)] transform-style-preserve-3d shadow-[0_10px_40px_-10px_rgba(0,0,0,0.06)] group-hover:shadow-[0_20px_50px_-10px_rgba(37,99,235,0.15)] ${isFlipped ? "rotate-y-180" : ""
-                  }`}
+                  /* Hover & Active Lift States */
+                  hover:translate-y-[-6px] data-[active=true]:translate-y-[-6px]
+                  hover:shadow-[0_20px_60px_rgba(37,99,235,0.25)] data-[active=true]:shadow-[0_20px_60px_rgba(37,99,235,0.25)]
+                  hover:border-[#2563EB] data-[active=true]:border-[#2563EB]
+
+                  /* Top Right Gradient Sweep */
+                  before:absolute before:content-[''] before:w-[20%] before:h-[20%] 
+                  before:bg-[linear-gradient(135deg,#1A365D_0%,#2563EB_100%)] 
+                  before:transition-all before:duration-500 before:ease-in-out before:z-0 
+                  before:top-0 before:right-0 before:rounded-[0_16px_0_100%]
+                  hover:before:w-full data-[active=true]:before:w-full 
+                  hover:before:h-full data-[active=true]:before:h-full 
+                  hover:before:rounded-[16px] data-[active=true]:before:rounded-[16px]
+
+                  /* Bottom Left Gradient Sweep */
+                  after:absolute after:content-[''] after:w-[20%] after:h-[20%] 
+                  after:bg-[linear-gradient(135deg,#1A365D_0%,#2563EB_100%)] 
+                  after:transition-all after:duration-500 after:ease-in-out after:z-0 
+                  after:bottom-0 after:left-0 after:rounded-[0_100%_0_16px]
+                  hover:after:w-full data-[active=true]:after:w-full 
+                  hover:after:h-full data-[active=true]:after:h-full 
+                  hover:after:rounded-[16px] data-[active=true]:after:rounded-[16px]
+                `}
               >
-                {/* FRONT */}
-                <div className="absolute inset-0 backface-hidden rounded-3xl border border-white bg-white/90 backdrop-blur-xl flex flex-col items-center justify-center text-center p-8 transition-colors duration-500">
-
-                  {/* Floating Icon Container */}
-                  <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl mb-6 bg-gradient-to-br from-[#EFF6FF] to-white border border-[#E2E8F0] shadow-[0_8px_20px_rgb(37,99,235,0.08)] transition-transform duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110 group-hover:shadow-[0_12px_25px_rgb(37,99,235,0.15)]">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-60 rounded-2xl"></div>
-                    <span className="text-[#2563EB] text-3xl relative z-10 drop-shadow-sm">
-                      {item.icon}
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-[#0F172A] tracking-tight">
-                    {item.title}
-                  </h3>
-
-                  {/* Micro-interaction hint */}
-                  <p className="absolute bottom-6 text-[11px] font-bold tracking-widest uppercase text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    Explore
-                  </p>
+                {/* ICON BOX */}
+                <div
+                  className={`
+                    relative z-10 w-[52px] h-[52px] rounded-[14px] flex items-center justify-center mb-[18px] 
+                    transition-all duration-400 ease-out
+                    ${isActive 
+                      ? "bg-white/20 text-white shadow-sm" 
+                      : "bg-blue-50 text-blue-500 group-hover:bg-white/20 group-hover:text-white"
+                    }
+                  `}
+                >
+                  <Icon size={24} />
                 </div>
 
-                {/* BACK */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-8 flex flex-col justify-center text-center bg-gradient-to-br from-[#2563EB] via-[#1D4ED8] to-[#1E40AF] shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/10 overflow-hidden">
+                {/* TITLE */}
+                <h3
+                  className={`
+                    relative z-10 text-[clamp(17px,2.2vw,22px)] font-extrabold tracking-tight 
+                    transition-all duration-400 ease-out
+                    ${isActive 
+                      ? "text-white mb-[18px]" 
+                      : "text-slate-900 mb-0 group-hover:text-white group-hover:mb-[18px]"
+                    }
+                  `}
+                >
+                  {card.title}
+                </h3>
 
-                  {/* Subtle Top Glare */}
-                  <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 to-transparent opacity-50 pointer-events-none rounded-t-3xl"></div>
-
-                  <h3 className="text-2xl font-bold text-white mb-3 tracking-tight drop-shadow-md">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-blue-50/90 text-[15px] font-medium leading-relaxed drop-shadow-sm max-w-[90%] mx-auto">
-                    {item.text}
+                {/* SMOOTH CONTENT REVEAL (Framer Motion) */}
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: isActive ? "auto" : 0,
+                    opacity: isActive ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                  className="relative z-10 overflow-hidden"
+                >
+                  {/* Text Description */}
+                  <p className="text-[15px] text-white/90 leading-[1.7] mb-[24px]">
+                    {card.text}
                   </p>
 
-                  <div className="relative z-10">
-                    {item.extra}
+                  {/* Tags / Pills */}
+                  <div className="flex flex-wrap gap-[10px] pb-[10px]">
+                    {card.tags.map((tag, i) => {
+                      const TagIcon = tag.icon;
+                      return (
+                        <span
+                          key={i}
+                          className="bg-white/20 text-white py-[6px] px-[14px] rounded-full text-[12.5px] font-semibold flex items-center gap-[6px] backdrop-blur-sm border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+                        >
+                          {TagIcon && <TagIcon size={14} />}
+                          {tag.text}
+                        </span>
+                      );
+                    })}
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
+                </motion.div>
+
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
-
-      <style jsx>{`
-        .perspective {
-          perspective: 1500px;
-        }
-        .transform-style-preserve-3d {
-          transform-style: preserve-3d;
-          /* Important for smooth rendering in Webkit */
-          -webkit-transform-style: preserve-3d;
-        }
-        .rotate-y-180 {
-          transform: rotateY(180deg);
-        }
-        .backface-hidden {
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-        }
-      `}</style>
     </section>
   );
 }

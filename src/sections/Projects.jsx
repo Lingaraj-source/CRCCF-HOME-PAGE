@@ -1,172 +1,140 @@
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { ShieldCheck, Cpu, Globe, Zap } from "lucide-react";
 
-/* COUNTER */
-function Counter({ value, inView }) {
+const StatCard = ({ value, label, subtext, icon: Icon, delay }) => {
   const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const domRef = useRef();
+
+  // Improved parser to correctly handle decimals (e.g., 99.9) and integers
+  const isDecimal = value.includes(".");
+  const numericString = value.replace(/[^0-9.]/g, "");
+  const targetValue = parseFloat(numericString);
+  const suffix = value.replace(/[0-9.]/g, "");
 
   useEffect(() => {
-    if (!inView) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+    if (domRef.current) observer.observe(domRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-    let start = 0;
-    const duration = 1200;
-    const step = duration / value;
+  useEffect(() => {
+    if (!isVisible) return;
 
-    const timer = setInterval(() => {
-      start += 1;
-      setCount(start);
-      if (start >= value) clearInterval(timer);
-    }, step);
+    const duration = 2000;
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const startTime = performance.now();
 
-    return () => clearInterval(timer);
-  }, [inView, value]);
+    const animate = (time) => {
+      const progress = Math.min((time - startTime) / duration, 1);
+      const eased = easeOut(progress);
+      
+      // Handle decimals gracefully for the UI
+      const valueNow = isDecimal
+        ? (eased * targetValue).toFixed(1)
+        : Math.floor(eased * targetValue);
 
-  return count;
-}
+      setCount(valueNow);
 
-const projects = [
-  {
-    title: "Cyber Security Dashboard",
-    desc: "Real-time monitoring system",
-    img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1470&auto=format&fit=crop",
-  },
-  {
-    title: "Government Portal",
-    desc: "Secure digital governance",
-    img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1470&auto=format&fit=crop",
-  },
-  {
-    title: "AI Threat Detection",
-    desc: "AI-based cyber defense",
-    img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1470&auto=format&fit=crop",
-  },
-];
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setCount(targetValue);
+      }
+    };
 
-export default function Projects() {
-  const { ref, inView } = useInView({ triggerOnce: true });
+    requestAnimationFrame(animate);
+  }, [isVisible, targetValue, isDecimal]);
 
   return (
-    <section className="relative pt-10 md:pt-14 pb-16 md:pb-20 overflow-hidden bg-[#F8FAFC]">
+    <div
+      ref={domRef}
+      className="group relative flex-1 p-8 border-b lg:border-b-0 lg:border-r border-slate-200/60 last:border-0 
+      hover:bg-slate-50/50 transition-colors duration-500 overflow-hidden flex flex-col justify-center"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {/* Subtle Premium Hover Glow */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-100/30 via-transparent to-transparent transition-opacity duration-700 pointer-events-none" />
 
-      {/* 🔥 ANIMATED GRADIENT BACKGROUND */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-
-        {/* moving gradient */}
-        <motion.div
-          className="absolute w-[140%] h-[140%] top-[-20%] left-[-20%] bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200 opacity-30"
-          animate={{
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 40,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          style={{ filter: "blur(120px)" }}
-        />
-
-        {/* floating blobs */}
-        <motion.div
-          className="absolute top-[10%] left-[15%] w-[300px] h-[300px] bg-blue-300 opacity-20 rounded-full"
-          animate={{ y: [0, 40, 0], x: [0, 30, 0] }}
-          transition={{ duration: 12, repeat: Infinity }}
-          style={{ filter: "blur(100px)" }}
-        />
-
-        <motion.div
-          className="absolute bottom-[10%] right-[15%] w-[300px] h-[300px] bg-indigo-300 opacity-20 rounded-full"
-          animate={{ y: [0, -40, 0], x: [0, -30, 0] }}
-          transition={{ duration: 14, repeat: Infinity }}
-          style={{ filter: "blur(120px)" }}
-        />
+      {/* Top Row: Icon + Value */}
+      <div className="flex items-center gap-4 mb-4 relative z-10">
+        <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:rotate-3">
+          <Icon size={24} strokeWidth={2} />
+        </div>
+        
+        <h3 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#0F172A] tabular-nums group-hover:text-blue-600 transition-colors duration-500">
+          {count}{suffix}
+        </h3>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20">
+      {/* Bottom Row: Text Content */}
+      <div className="relative z-10">
+        <p className="text-[11px] font-extrabold text-blue-600 uppercase tracking-[0.2em] mb-1.5">
+          {label}
+        </p>
+        <p className="text-sm text-slate-500 font-medium leading-relaxed">
+          {subtext}
+        </p>
+      </div>
+    </div>
+  );
+};
 
-        {/* HEADER */}
-        <div className="mb-14 md:mb-16 max-w-3xl mx-auto text-center">
+export default function Stats() {
+  const stats = [
+    { value: "500+", label: "Cyber Defenses", subtext: "Enterprise-grade security deployments", icon: ShieldCheck },
+    { value: "120+", label: "SaaS Products", subtext: "Scalable software solutions built", icon: Cpu },
+    { value: "25M+", label: "Secure Transactions", subtext: "Handled through our encrypted APIs", icon: Zap },
+    { value: "99.9%", label: "Uptime Reliability", subtext: "Guaranteed product availability", icon: Globe },
+  ];
 
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight text-[#0F172A]">
-            Building{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
-              Real Impact
-            </span>{" "}
-            Through Projects
+  return (
+    // Reduced outer padding (py-28 to py-16) to save vertical space
+    <section className="py-16 px-6 bg-[#F8FAFC]">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header Section - Reduced bottom margin (mb-24 to mb-12) */}
+        <div className="flex flex-col items-center text-center mb-12">
+          {/* Badge */}
+          <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[11px] font-extrabold uppercase tracking-[0.25em] mb-8 shadow-sm">
+            🛡️ Network Intelligence
+          </span>
+
+          {/* Heading */}
+          <h2 className="text-4xl md:text-5xl font-bold font-[Inter] leading-tight mb-6 text-[#0F172A] tracking-[-0.01em]">
+            Our <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">Digital</span> Footprint
           </h2>
 
-          <p className="text-[#64748B] mt-5 text-sm md:text-base leading-relaxed">
-            We deliver scalable, secure, and innovative solutions across
-            domains.
+          <p className="text-slate-500 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
+            Leading the charge in{" "}
+            <span className="text-blue-600 font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+              Cyber Defense
+            </span>{" "}
+            and{" "}
+            <span className="text-blue-600 font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+              Product Innovation
+            </span>. Empowering modern businesses with secure, scalable technology.
           </p>
+        </div>
 
-          {/* STATS */}
-          <div
-            ref={ref}
-            className="flex justify-center gap-5 md:gap-8 mt-10 flex-wrap"
-          >
-            {[
-              { value: 70, label: "Projects Delivered" },
-              { value: 27, label: "Successfully Completed" },
-              { value: 4, label: "Currently Ongoing" },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="relative backdrop-blur-lg bg-white/70 border border-white/50 rounded-2xl px-6 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:shadow-[0_15px_40px_rgba(37,99,235,0.15)] transition"
-              >
-                <h3 className="text-2xl md:text-3xl font-bold text-[#2563EB] text-center">
-                  <Counter value={item.value} inView={inView} />+
-                </h3>
-
-                <p className="text-xs md:text-sm text-[#64748B] text-center mt-1">
-                  {item.label}
-                </p>
-              </motion.div>
+        {/* Unified Dashboard Strip Container */}
+        <div className="relative">
+          {/* Background Ambient Glow for Premium Feel */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 via-blue-400/10 to-blue-600/10 rounded-[2.5rem] blur-xl opacity-70" />
+          
+          {/* Main Strip Panel */}
+          <div className="relative bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-[2rem] shadow-2xl shadow-slate-200/50 flex flex-col lg:flex-row overflow-hidden transform transition-all duration-700 hover:shadow-blue-900/5 hover:border-blue-200/60">
+            {stats.map((stat, i) => (
+              <StatCard key={i} {...stat} delay={i * 150} />
             ))}
           </div>
         </div>
 
-        {/* PROJECT GRID */}
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {projects.map((project, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.15 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="group bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden border border-white/40 shadow-[0_8px_25px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition"
-            >
-
-              {/* IMAGE */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={project.img}
-                  alt={project.title}
-                  className="h-52 w-full object-cover transition duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition"></div>
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-[#0F172A] group-hover:text-blue-600 transition">
-                  {project.title}
-                </h3>
-
-                <p className="text-[#64748B] text-sm mt-2 leading-relaxed">
-                  {project.desc}
-                </p>
-              </div>
-
-              <div className="h-[2px] w-full bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition"></div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );

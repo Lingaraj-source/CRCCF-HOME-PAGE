@@ -67,19 +67,18 @@ export default function Navbar() {
 
         <div className="relative max-w-[1440px] mx-auto px-4 md:px-10 lg:px-20 h-[70px] flex items-center gap-[24px]">
           {/* LOGO */}
-          {/* LOGO */}
           <Link to="/" className="group flex shrink-0 items-center gap-[2px]">
             {/* LOGO IMAGE */}
             <img
               src={logo}
               alt="CRCCF Logo"
               className="
-    h-[68px] w-auto
-    object-contain
-    drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]
-    transition-all duration-300
-    group-hover:scale-105
-    "
+                h-[68px] w-auto
+                object-contain
+                drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]
+                transition-all duration-300
+                group-hover:scale-105
+              "
             />
 
             {/* LOGO TEXT */}
@@ -90,14 +89,14 @@ export default function Navbar() {
 
               <span
                 className="
-      text-[7px]
-      uppercase
-      tracking-[0.14em]
-      text-white/45
-      font-semibold
-      mt-[2px]
-      whitespace-nowrap
-      "
+                  text-[7px]
+                  uppercase
+                  tracking-[0.14em]
+                  text-white/45
+                  font-semibold
+                  mt-[2px]
+                  whitespace-nowrap
+                "
               >
                 CR CYBER CRIME FOUNDATION
               </span>
@@ -177,7 +176,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.22 }}
-                    className="absolute top-[calc(100%+8px)] left-0
+                    className="absolute top-[calc(100%+8px)] left-0 z-[200]
                     min-w-[240px]
                     bg-white rounded-xl overflow-hidden
                     border border-gray-200
@@ -279,39 +278,45 @@ export default function Navbar() {
           {/* RIGHT SIDE */}
           <div className="hidden lg:flex items-center gap-[20px]">
             {/* SEARCH */}
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="text-white/70 hover:text-white transition-all duration-200"
-            >
-              <FaSearch size={16} />
-            </button>
+            <div className="relative flex items-center justify-center">
+              <button
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="flex items-center justify-center text-white/70 hover:text-white transition-all duration-200"
+              >
+                <FaSearch size={16} />
+              </button>
 
-            {/* SEARCH BOX */}
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.input
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 180, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  type="text"
-                  placeholder="Search..."
-                  className="h-[34px] bg-white/10 border border-white/10
-                  rounded-lg px-4 text-sm text-white outline-none
-                  placeholder:text-white/40"
-                />
-              )}
-            </AnimatePresence>
+              {/* SEARCH BOX */}
+              <AnimatePresence>
+                {searchOpen && (
+                  <motion.div
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: 180, opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="absolute right-full mr-3 overflow-hidden flex items-center"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      className="h-[34px] w-full bg-white/10 border border-white/10
+                      rounded-lg px-4 text-sm text-white outline-none
+                      placeholder:text-white/40"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* NOTIFICATION */}
             <div
               ref={notifRef}
-              className="relative"
+              className="relative flex items-center justify-center"
               onMouseEnter={() => setNotifOpen(true)}
               onMouseLeave={() => setNotifOpen(false)}
             >
               <button
-                className="relative text-white/75 hover:text-white
+                className="relative flex items-center justify-center text-white/75 hover:text-white
                 transition-all duration-200 hover:scale-110"
               >
                 <FaBell size={18} />
@@ -319,7 +324,7 @@ export default function Navbar() {
                 <span
                   className="absolute -top-2 -right-2
                   w-[16px] h-[16px]
-                  rounded-full bg-red-500
+                  rounded-full bg-red-600
                   text-[9px] font-bold text-white
                   flex items-center justify-center
                   border border-[#0C1A3A]"
@@ -335,7 +340,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.96 }}
                     transition={{ duration: 0.22 }}
-                    className="absolute right-0 mt-5 w-80
+                    className="absolute right-[-10px] top-[calc(100%+16px)] z-[200] w-80
                     bg-white rounded-2xl overflow-hidden
                     border border-gray-200
                     shadow-[0_20px_60px_rgba(0,0,0,0.20)]"
@@ -346,11 +351,11 @@ export default function Navbar() {
                       </h3>
                     </div>
 
-                    <div className="px-5 py-4 border-b hover:bg-gray-50 transition text-black">
+                    <div className="px-5 py-4 border-b hover:bg-gray-50 transition cursor-pointer text-black text-[14px]">
                       Cyber Alert
                     </div>
 
-                    <div className="px-5 py-4 hover:bg-gray-50 transition text-black">
+                    <div className="px-5 py-4 hover:bg-gray-50 transition cursor-pointer text-black text-[14px]">
                       Report Update
                     </div>
                   </motion.div>
@@ -362,11 +367,11 @@ export default function Navbar() {
             <button
               className="h-[38px] px-[18px]
               rounded-[8px]
-              bg-gradient-to-r from-red-500 to-orange-500
+              bg-gradient-to-r from-red-700 to-red-600
               text-white text-[13px] font-[700]
-              shadow-[0_0_25px_rgba(239,68,68,0.35)]
+              shadow-[0_0_25px_rgba(185,28,28,0.35)]
               hover:scale-[1.03]
-              hover:shadow-[0_0_30px_rgba(239,68,68,0.55)]
+              hover:shadow-[0_0_30px_rgba(185,28,28,0.55)]
               transition-all duration-300"
             >
               Report Crime

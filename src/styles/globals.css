@@ -702,3 +702,11 @@ body {
 .central-hub {
   animation: hub-pulse 3s infinite;
 }
+@keyframes open {
+  0% {
+    transform: perspective(1900px) rotateX(-88.5deg);
+  }
+  100% {
+    transform: perspective(1900px) rotateX(0deg);
+  }
+}
