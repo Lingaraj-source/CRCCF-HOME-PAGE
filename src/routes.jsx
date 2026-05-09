@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
+import ScrollToTop from "./components/ScrollToTop";
 import MainLayout from "./layouts/MainLayout";
 import ReachUs from "./pages/ReachUs";
 import Gallery from "./pages/Gallery/Gallery";
@@ -26,6 +27,8 @@ function Loader() {
 export default function AppRoutes() {
   return (
     <BrowserRouter>
+      <ScrollToTop/>
+
       <Suspense fallback={<Loader />}>
         <Routes>
           {/* 🔥 LAYOUT WRAPPER */}
