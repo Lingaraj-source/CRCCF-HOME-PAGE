@@ -54,6 +54,7 @@ export default function Navbar() {
     <>
       {/* HEADER */}
       <header
+        ref={menuRef}
         className={`sticky top-0 z-[100] transition-all duration-300
         bg-[#0C1A3A]
         border-b border-[rgba(255,255,255,.07)]
@@ -380,12 +381,104 @@ export default function Navbar() {
 
           {/* MOBILE BUTTON */}
           <button
-            className="lg:hidden ml-auto text-white text-[22px]"
+            className="lg:hidden ml-auto text-white text-[22px] p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
+
+        {/* MOBILE NAVIGATION MENU */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden w-full absolute top-full left-0 z-[100] bg-[#0C1A3A] border-b border-[rgba(255,255,255,.07)] shadow-[0_8px_30px_rgba(0,0,0,0.35)] overflow-hidden"
+            >
+              <div className="flex flex-col px-6 py-4 space-y-3">
+                <Link to="/" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  Home
+                </Link>
+                <Link to="/about" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  About Us
+                </Link>
+                <Link to="/services" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  Our Services
+                </Link>
+
+                {/* Mobile Dropdown */}
+                <div className="flex flex-col">
+                  <button
+                    onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                    className="flex items-center justify-between text-white/85 text-[15px] font-[600] hover:text-white transition pb-1"
+                  >
+                    Skill Development
+                    <FaChevronDown
+                      size={12}
+                      className={`transition-transform duration-300 ${
+                        mobileDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {mobileDropdownOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="flex flex-col pl-4 space-y-3 overflow-hidden border-l border-white/10 mt-2 py-2"
+                      >
+                        <Link to="/training" className="text-white/70 text-[14px] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                          Training
+                        </Link>
+                        <Link to="/internship" className="text-white/70 text-[14px] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                          Internship
+                        </Link>
+                        <Link to="/awareness" className="text-white/70 text-[14px] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                          Awareness Programs
+                        </Link>
+                        <Link to="/certification" className="text-white/70 text-[14px] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                          Certification Course
+                        </Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <Link to="/insights" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  Insights
+                </Link>
+                <Link to="/careers" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  Careers
+                </Link>
+                <Link to="/gallery" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  Gallery
+                </Link>
+                <Link to="/contact" className="text-white/85 text-[15px] font-[600] hover:text-white transition" onClick={() => setMobileOpen(false)}>
+                  Contact
+                </Link>
+
+                <div className="pt-3 pb-1">
+                  <button
+                    className="h-[42px] w-full
+                    rounded-[8px]
+                    bg-gradient-to-r from-red-700 to-red-600
+                    text-white text-[14px] font-[700]
+                    shadow-[0_0_25px_rgba(185,28,28,0.35)]
+                    active:scale-[0.98]
+                    transition-all duration-300"
+                  >
+                    Report Crime
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );
