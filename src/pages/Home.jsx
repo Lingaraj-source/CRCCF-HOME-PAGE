@@ -8,12 +8,14 @@ import TrustedBy from "../sections/TrustedBy";
 /* ================= WHO WE ARE (IMPORTANT FIX) ================= */
 import WhoWeAre from "../sections/WhoWeAre";
 import TechStack from "../sections/TechStack";
+import InternshipPrograms from "../sections/InternshipSection";
 
 /* ================= LAZY SECTIONS ================= */
 const Introduction = lazy(() => import("../sections/Introduction"));
 const PurposeMission = lazy(() => import("../sections/PurposeMission"));
 const WhatWeDo = lazy(() => import("../sections/WhatWeDo"));
 const Activities = lazy(() => import("../sections/Activities"));
+const InternshipSection = lazy(() => import("../sections/InternshipSection"));
 const Projects = lazy(() => import("../sections/Projects"));
 const Stats = lazy(() => import("../sections/Stats"));
 const Testimonials = lazy(() => import("../sections/Testimonials"));
@@ -42,6 +44,7 @@ export default function Home() {
         <Activities />
         <TechStack/>
         <Projects />
+        <InternshipPrograms/>
         <Stats />
         <Testimonials />
         <WhyChooseUs />
